@@ -6,6 +6,18 @@ The document itself is dated at the top (currently "April 2026") and updated onl
 
 ## [Unreleased]
 
+## 2026-04-12 (third revision)
+
+### Added
+- **Special Sections** — a new third top-level group (`## ⚠️ Special Sections`) introducing patterns that aren't commands-to-execute:
+  - XXII. Failure Modes & Anti-Patterns — 23 failure modes across Reasoning / Scope / Context / Multi-Agent categories, each with a Detection Signal column
+  - XXIII. Unnamed & Emerging Patterns — 18 informal operator strategies across Productivity / Multi-Agent / Cognitive categories, each with a When-to-Use column
+- `scripts/build.js`: parser recognizes the third `##` part header; `PART_II_SECTIONS` extended for XXII/XXIII; `renderRow` emits a 3rd `.cmd-extra` column when present; new `.s-antipattern` and `.s-hidden` CSS; new "Anti" and "Hidden" filter buttons (rose-tinted `part-iii-btn`); Part III divider; TOC shows "Special" label.
+- `scripts/export-commands.js`: new `"part": "Special"` value; 3rd-column cells emitted as a dynamic key derived from the table header (e.g., `detection_signal`, `when_to_use`).
+
+### Changed
+- Total command count: 372 → 411 (+39 Special-section entries)
+
 ## 2026-04-12 (second revision)
 
 ### Added

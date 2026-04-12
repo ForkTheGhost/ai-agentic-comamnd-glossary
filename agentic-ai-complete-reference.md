@@ -924,6 +924,113 @@ For implementing this pattern today in Claude Code:
 > 💡 Your AI provisioning pipeline with HCL as infrastructure config = Infrastructure-as-Code. The Rust/Tauri work with obfuscation strategies is Image Pipeline (binary hardening at the build stage).
 
 ---
+---
+
+## ⚠️ Special Sections
+
+> The sections below are different from the rest of this glossary. Sections I–XXI define **what agents should do**. Sections XXII–XXIII define **what goes wrong** and **what people do but never name**. These are the patterns you won't find in any framework docs — they come from watching agents fail in production and from the undocumented strategies that experienced operators use instinctively. Name the failure mode and you can detect it. Name the hidden pattern and you can teach it.
+
+---
+
+### XXII. Failure Modes & Anti-Patterns
+
+*⚠️ These are not commands to execute — they are failure modes to detect and prevent. If you see these happening, something is wrong. Include them in your CLAUDE.md, skill files, and foreman instructions as explicit "watch for and interrupt" signals.*
+
+#### A. Reasoning Failures
+
+| ⚠️ Failure Mode | Description | Detection Signal |
+|---|---|---|
+| **Anchor Drift** | Agent fixates on an early assumption and keeps building on it even as evidence mounts that it's wrong. Sunk-cost reasoning. | Output keeps referencing an early decision despite contradicting evidence. Agent resists Replan. |
+| **Premature Converge** | Agent locks onto the first plausible solution without exploring alternatives. The opposite of Self-Consistency. | Solution appears suspiciously fast. No alternatives mentioned. No trade-off analysis. |
+| **Hallucinate Confidence** | Agent presents uncertain information with high confidence. Authoritative tone masks shaky reasoning. | Claims without citations. Specific numbers/dates that weren't in the source material. "Certainly" and "definitely" on ambiguous topics. |
+| **Cargo Cult** | Agent copies a pattern it's seen work elsewhere without understanding *why*, applying it where it doesn't fit. | Boilerplate that doesn't match the context. "Best practice" applied without considering constraints. |
+| **Sycophant Loop** | Agent agrees with the human's framing even when it's wrong, reinforcing a bad approach instead of pushing back. | Agent never challenges assumptions. Every suggestion is "great idea." Errors in the human's premise go unquestioned. |
+| **Confabulation Cascade** | Agent hallucinates a fact, then builds reasoning on top of it, then cites its own earlier reasoning as evidence. Self-reinforcing hallucination. | Conclusions that trace back to unsourced claims from earlier in the same session. |
+
+> ⚠️ **Mitigation:** Reflect + Red Team after critical reasoning steps. Self-Consistency (multiple paths) prevents Premature Converge. Ground prevents Hallucinate Confidence. Explicit Negative Prompts in CLAUDE.md prevent Sycophant Loop ("push back when you disagree").
+
+#### B. Scope & Focus Failures
+
+| ⚠️ Failure Mode | Description | Detection Signal |
+|---|---|---|
+| **Yak Shave** | Agent gets trapped in a dependency chain: to do A needs B, needs C, needs D... three levels deep solving the wrong problem. | Agent's current task has no visible connection to the original goal. Multiple "first I need to..." transitions. |
+| **Scope Gallop** | Each turn subtly expands beyond the original ask. Task triples in size without explicit approval. | Deliverable keeps growing. Agent adds features/tests/docs nobody asked for. "While I'm at it..." language. |
+| **Gold Plate** | Agent over-engineers beyond what was asked — adds tests nobody requested, refactors adjacent code, writes docs for a one-off script. | Time/tokens spent is disproportionate to task complexity. Output has polish nobody needs. |
+| **Infinite Clarify** | Agent keeps asking clarifying questions instead of making a reasonable assumption and proceeding. Paralysis by over-specification. | Multiple turns of questions before any work output. Questions about details that don't affect the approach. |
+| **Rabbit Hole** | Agent goes deep into an interesting tangent that's technically related but not on the critical path. Intellectual curiosity overrides task focus. | Long, detailed output on a subtopic. Agent seems engaged but isn't making progress toward the goal. |
+
+> ⚠️ **Mitigation:** Spec with clear acceptance criteria prevents Scope Gallop and Gold Plate. Estimate with token budgets catches Yak Shave. The foreman's Poll + Heartbeat detects Rabbit Hole. Constrain + Fence prevents Infinite Clarify ("make reasonable assumptions and note them").
+
+#### C. Context & Memory Failures
+
+| ⚠️ Failure Mode | Description | Detection Signal |
+|---|---|---|
+| **Ghost Context** | Information the agent *should* have but doesn't — it was in a previous session, different agent's context, or the human's head. | Agent asks about something that was already discussed. Agent re-derives information that was previously established. |
+| **Context Poisoning** | Bad information enters the context (wrong file, outdated doc, hallucinated fact) and corrupts all downstream reasoning. | Conclusions that logically follow from the context but are factually wrong. Agent confidently builds on incorrect premises. |
+| **Stale Plan** | Foreman keeps executing the original plan after the situation has changed. The plan was right when made; it's wrong now. | Tasks being executed that no longer make sense. Agent outputs that don't account for recent discoveries. |
+| **Echo Chamber** | In multi-agent setups, agents reinforce each other's errors because they share context or were seeded with the same assumptions. | Multiple agents arrive at the same wrong conclusion. Disagreement is suspiciously absent. |
+| **Context Thrash** | Agent repeatedly loads, evicts, and reloads the same context because it can't decide what's relevant. Burns tokens without progress. | High token usage with low output quality. Repeated references to the same files/concepts. |
+
+> ⚠️ **Mitigation:** Snapshot prevents Ghost Context (capture state for future sessions). Validate against Ground Truth catches Context Poisoning. Replan with explicit trigger conditions prevents Stale Plan. Shadow Agent (XXIII) prevents Echo Chamber. Window management prevents Context Thrash.
+
+#### D. Multi-Agent Failures
+
+| ⚠️ Failure Mode | Description | Detection Signal |
+|---|---|---|
+| **Deadlock** | Two or more agents are each waiting for the other to finish before they can proceed. No progress. | Multiple agents show "blocked" status simultaneously. No task state changes over multiple Poll cycles. |
+| **Thundering Herd** | Multiple agents simultaneously attempt the same action (API call, file write, resource acquisition), causing contention or failure. | Concurrent modification errors. Rate limit hits. Merge conflicts. |
+| **Silent Failure** | Agent fails but doesn't report it — continues with partial results or quietly skips the failed step. | Output is subtly incomplete. Missing sections nobody noticed. Downstream agents working with partial data. |
+| **Authority Confusion** | Multiple agents believe they own the same resource or decision. Conflicting edits, contradictory outputs. | Same file modified by multiple agents. Conflicting instructions given to downstream agents. |
+| **Zombie Agent** | Agent appears alive (Heartbeat passes) but isn't making meaningful progress — spinning, looping, or producing garbage. | Heartbeat OK but no task state changes. Token usage high but no useful output. |
+
+> ⚠️ **Mitigation:** Sequence with explicit dependencies prevents Deadlock. Barrier prevents Thundering Herd. Assert at pipeline checkpoints catches Silent Failure. Contract + clear ownership prevents Authority Confusion. Poll with progress checks (not just liveness) catches Zombie Agent.
+
+---
+
+### XXIII. Unnamed & Emerging Patterns
+
+*💎 These are the strategies experienced operators use instinctively but rarely formalize. They don't appear in framework docs or architecture textbooks. Some are well-known practices without established agent terminology. Others are emerging patterns that will likely become standard in the next generation of agent tooling. Name them, and you can teach them to your agents and your team.*
+
+#### A. Hidden Productivity Patterns
+
+| 💎 Pattern | Description | When to Use |
+|---|---|---|
+| **Rubber Duck** | Explain the problem to the agent not because you need its answer, but because articulating the problem reveals the solution. The agent is a forcing function for your own thinking. | When you're stuck and can't see the path forward. The act of writing the prompt IS the work. |
+| **Shotgun Debug** | Throw the entire error log, stack trace, and surrounding context at the agent with no decomposition. Just raw context dump + "figure it out." Works surprisingly often. | When the error is opaque and you don't know where to start. Let the agent's pattern matching work. |
+| **Warm-Up Prompt** | Give the agent a low-stakes task in the domain before the real task — "summarize this codebase" before "refactor this module." Builds context and calibrates the agent's mental model. | Before complex tasks in unfamiliar codebases. The warm-up is cheap; the calibration is valuable. |
+| **Inversion Prompt** | Instead of asking "how should I build X," ask "what are all the ways X could fail?" The failure analysis reveals the design requirements. | Architecture and design phases. The failure modes ARE the specification. |
+| **Breadcrumb Trail** | Leave deliberate markers in your code/docs that future agents will find and follow — comments like `// AGENT: this connects to the auth service via OIDC` or `<!-- CONTEXT: this decision was made because of HIPAA §164.312 -->`. | Any codebase where agents will work repeatedly. Invest now, save context-loading costs forever. |
+| **Throwaway Agent** | Spawn an agent specifically to explore a dead-end approach, knowing you'll discard the output. The value is confirming "that path doesn't work" so you can commit to the right one. | When two approaches seem equally viable and you need to eliminate one. Cheaper than debating. |
+
+> 💎 **In Claude Code:** Rubber Duck = just start typing your problem as a prompt; you'll often solve it mid-sentence. Shotgun Debug = paste the full error + `! cat relevant_file.py` + "fix this." Breadcrumb Trail = comments in your code that Claude Code's agentic search will find.
+
+#### B. Advanced Multi-Agent Strategies
+
+| 💎 Pattern | Description | When to Use |
+|---|---|---|
+| **Shadow Agent** | Run a second agent on the same task independently with different context or model. Use divergence between outputs as a quality signal. | High-stakes tasks where correctness matters more than speed. The diff between two independent solutions reveals blind spots. |
+| **Speculative Execute** | Start work on a likely-needed task before it's officially assigned, betting the foreman will need it. CPU branch prediction for agents. | When the dependency graph is predictable. If the bet pays off, you saved wall-clock time. If not, discard is cheap. |
+| **Consensus Fork** | When agents disagree, don't pick a winner — fork the pipeline and pursue both approaches in parallel until one proves itself through testing or validation. | When the disagreement is about approach, not facts. Let reality pick the winner instead of debate. |
+| **Context Handwarmer** | Pre-load an agent with relevant context before assigning its task, so when the task arrives, the agent is already "warm" and doesn't waste tokens on discovery. | When you know what tasks are coming and can prepare agents ahead of time. Batch the context loading. |
+| **Progressive Disclosure** | Give the agent minimal context first, let it ask for what it needs, and inject on demand. The opposite of Prefill. Reduces noise. | Exploratory tasks where you don't know what context will be relevant. Let the agent's questions guide the context. |
+| **Canary Prompt** | Before running a prompt at scale (e.g., `/batch` across 50 files), test it on 2-3 representative files first to verify the output quality and catch prompt bugs. | Before any batch operation. The prompt is code — test it before deploying. |
+
+> 💎 **In Claude Code:** Shadow Agent = two `claude` instances in different terminals, same task, compare `/diff`. Speculative Execute = start the next task in a second terminal while the first is in `/plan` review. Canary Prompt = run your `/batch` task on one file first.
+
+#### C. Cognitive & Metacognitive Patterns
+
+| 💎 Pattern | Description | When to Use |
+|---|---|---|
+| **Token Budget** | Explicitly allocate a token budget to a task and treat it like money. Agent must complete within budget or request an extension with justification. | Long-running tasks, expensive models, cost-sensitive environments. Forces efficiency and prevents runaway sessions. |
+| **Entropy Check** | Measure how "confused" an agent is by looking at reasoning quality, response length, confidence signals, and number of self-corrections. High entropy = struggling. | During the foreman's Poll cycle. High entropy is an early warning to intervene before the agent wastes tokens. |
+| **Temporal Fence** | A constraint that changes over time — "before Friday this is a draft, after Friday it's locked." Time-aware guard rails that evolve with the project lifecycle. | Governance workflows, release management, compliance deadlines. The rules change based on where you are in the timeline. |
+| **Negative Space** | Deliberately define what the agent should NOT explore, NOT touch, NOT change. The absence of action is itself a design decision. | Any task near production systems, sensitive data, or shared infrastructure. "Do not modify anything in `/prod`" is as important as the task itself. |
+| **Perspective Shift** | Ask the agent to re-evaluate its own output from a different persona's viewpoint — "now review this as a security auditor" or "would a junior developer understand this?" | After draft completion. Cheap way to catch blind spots without spawning a separate review agent. |
+| **Exit Criteria** | Define upfront exactly what "done" looks like AND what "good enough" looks like. Two thresholds — the agent aims for "done" but can stop at "good enough" if budget is tight. | Every task. Without Exit Criteria, agents either Gold Plate or deliver incomplete work. Spec's acceptance criteria should include both thresholds. |
+
+> 💎 **In Claude Code:** Token Budget = `/cost` monitoring + `/effort low` for cheap phases. Negative Space = Negative Prompt in CLAUDE.md ("never modify files in `/legacy`"). Perspective Shift = "now review what you just wrote as if you're a penetration tester." Exit Criteria = explicit in your Spec before work begins.
+
+---
 
 *Agentic AI — Complete Command Reference · April 2026*
 *Part I: code.claude.com, Anthropic docs · Part II: Universal agent patterns*

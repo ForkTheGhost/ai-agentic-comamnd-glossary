@@ -57,7 +57,14 @@ const PART_II_SECTIONS = {
   'XIX':  { cls: 'infrasec',      icon: '\uD83C\uDFD7\uFE0F', cat: 'infrasec',      tipTone: 'orange'  },
   'XX':   { cls: 'docs',          icon: '\uD83D\uDCD6',       cat: 'docs',          tipTone: 'yellow'  },
   'XXI':  { cls: 'architecture',  icon: '\uD83C\uDFDB\uFE0F', cat: 'architecture',  tipTone: 'indigo'  },
+  'XXII': { cls: 'antipattern',   icon: '\u26A0\uFE0F',       cat: 'antipattern',   tipTone: 'rose'    },
+  'XXIII':{ cls: 'hidden',        icon: '\uD83D\uDC8E',       cat: 'hidden',        tipTone: 'sky'     },
 };
+
+const FILTER_BUTTONS_P3 = [
+  ['antipattern', 'Anti'],
+  ['hidden',      'Hidden'],
+];
 
 const FILTER_BUTTONS_P1 = [
   ['session',    'Session'], ['context', 'Context'], ['model', 'Model'],
@@ -141,16 +148,21 @@ function parse(md) {
     if (trimmed === '---' || trimmed === '') { i++; continue; }
 
     const partMatch = /^##\s+Part\s+(I{1,2}):\s*(.+)$/.exec(trimmed);
-    if (partMatch) {
+    const specialMatch = /^##\s+(?:\u26A0\uFE0F?\s*)?Special\s+Sections\s*$/.exec(trimmed);
+    if (partMatch || specialMatch) {
       flushSection();
       i++;
       let desc = '';
       while (i < n && lines[i].trim() === '') i++;
-      if (i < n && !lines[i].startsWith('#') && lines[i].trim() !== '---') {
+      if (i < n && !lines[i].startsWith('#') && lines[i].trim() !== '---' && !lines[i].startsWith('>')) {
         desc = lines[i].trim();
         i++;
       }
-      currentPart = { roman: partMatch[1], title: partMatch[2].trim(), desc, sections: [] };
+      if (partMatch) {
+        currentPart = { roman: partMatch[1], title: partMatch[2].trim(), desc, sections: [] };
+      } else {
+        currentPart = { roman: 'S', title: 'Special Sections', desc, sections: [], special: true };
+      }
       doc.parts.push(currentPart);
       continue;
     }
@@ -159,7 +171,7 @@ function parse(md) {
       const heading = trimmed.slice(4).trim();
       const p2 = /^([IVX]+)\.\s+(.+)$/.exec(heading);
       let section;
-      if (p2 && currentPart && currentPart.roman === 'II') {
+      if (p2 && currentPart && (currentPart.roman === 'II' || currentPart.roman === 'S')) {
         section = { kind: 'p2', numeral: p2[1], title: p2[2], id: slugify(p2[2]), subtitle: '', groups: [] };
       } else if (currentPart && currentPart.roman === 'II') {
         // "Mapping Foreman Commands to Claude Code" -> merge into section X.
@@ -239,7 +251,7 @@ function parse(md) {
         i++;
         continue;
       }
-      currentGroup.rows.push({ name: cells[0] || '', desc: cells[1] || '' });
+      currentGroup.rows.push({ name: cells[0] || '', desc: cells[1] || '', extra: cells[2] || '' });
       i++;
       continue;
     }
@@ -288,6 +300,11 @@ function renderForemanPre(raw) {
 }
 
 function renderRow(row) {
+  if (row.extra) {
+    return '    <div class="cmd-row cmd-row-triple"><div class="cmd-name">' + renderCmdName(row.name) +
+           '</div><div class="cmd-desc">' + renderInline(row.desc) +
+           '</div><div class="cmd-extra">' + renderInline(row.extra) + '</div></div>';
+  }
   return '    <div class="cmd-row"><div class="cmd-name">' + renderCmdName(row.name) +
          '</div><div class="cmd-desc">' + renderInline(row.desc) + '</div></div>';
 }
@@ -356,11 +373,23 @@ function renderSection(section, currentPart) {
 
 function renderPartDivider(part) {
   const r = part.roman;
-  const cls = r === 'I' ? 'part-divider-i' : 'part-divider-ii';
-  const labelCls = r === 'I' ? 'part-label-i' : 'part-label-ii';
+  let cls, labelCls, labelText;
+  if (part.special) {
+    cls = 'part-divider-iii';
+    labelCls = 'part-label-iii';
+    labelText = 'Special';
+  } else if (r === 'I') {
+    cls = 'part-divider-i';
+    labelCls = 'part-label-i';
+    labelText = 'Part I';
+  } else {
+    cls = 'part-divider-ii';
+    labelCls = 'part-label-ii';
+    labelText = 'Part II';
+  }
   return [
     '<div class="part-divider ' + cls + '" data-cat="all">',
-    '  <span class="part-label ' + labelCls + '">Part ' + r + '</span>',
+    '  <span class="part-label ' + labelCls + '">' + escapeHtml(labelText) + '</span>',
     '  <span class="part-title">' + escapeHtml(part.title) + '</span>',
     '  <span class="part-desc">' + escapeHtml(part.desc) + '</span>',
     '</div>',
@@ -385,6 +414,12 @@ function renderFilterBar() {
   }
   b.push('  </div>');
   b.push('  <div class="filter-sep"></div>');
+  b.push('  <div class="filter-group">');
+  for (const [cat, label] of FILTER_BUTTONS_P3) {
+    b.push('    <button class="filter-btn part-iii-btn" data-filter="' + cat + '">' + label + '</button>');
+  }
+  b.push('  </div>');
+  b.push('  <div class="filter-sep"></div>');
   b.push('  <div class="filter-group filter-search">');
   b.push('    <input type="search" id="search-input" class="search-input" placeholder="Search commands… (/)" autocomplete="off" spellcheck="false" />');
   b.push('    <span class="search-count" id="search-count"></span>');
@@ -396,7 +431,8 @@ function renderToc(doc) {
   const items = [];
   items.push('  <div class="toc-title">On this page</div>');
   for (const part of doc.parts) {
-    items.push('  <div class="toc-part">Part ' + part.roman + '</div>');
+    const partLabel = part.special ? 'Special' : 'Part ' + part.roman;
+    items.push('  <div class="toc-part">' + partLabel + '</div>');
     items.push('  <ul class="toc-list">');
     for (const s of part.sections) {
       const label = (s.kind === 'p2' && s.numeral) ? s.numeral + '. ' + s.title : s.title;
@@ -563,6 +599,7 @@ const CSS = `  :root {
 
   .part-divider-i { background: linear-gradient(135deg, rgba(199,143,255,0.06), rgba(108,180,255,0.06)); }
   .part-divider-ii { background: linear-gradient(135deg, rgba(92,232,232,0.06), rgba(92,235,160,0.06)); }
+  .part-divider-iii { background: linear-gradient(135deg, rgba(251,113,133,0.06), rgba(56,189,248,0.06)); }
 
   .part-label {
     font-family: var(--mono);
@@ -577,6 +614,7 @@ const CSS = `  :root {
 
   .part-label-i { background: var(--accent-dim); color: var(--accent); }
   .part-label-ii { background: var(--cyan-dim); color: var(--cyan); }
+  .part-label-iii { background: var(--rose-dim); color: var(--rose); }
 
   .part-title { font-family: var(--mono); font-size: 1rem; font-weight: 700; }
   .part-desc { color: var(--text-dim); font-size: 0.82rem; margin-left: auto; }
@@ -617,6 +655,8 @@ const CSS = `  :root {
   .filter-btn.active { background: var(--accent-dim); border-color: var(--accent); color: var(--accent); }
   .filter-btn.part-ii-btn.active { background: var(--cyan-dim); border-color: var(--cyan); color: var(--cyan); }
   .filter-btn.part-ii-btn:hover { border-color: var(--cyan); }
+  .filter-btn.part-iii-btn.active { background: var(--rose-dim); border-color: var(--rose); color: var(--rose); }
+  .filter-btn.part-iii-btn:hover { border-color: var(--rose); }
 
   .search-input {
     font-family: var(--mono);
@@ -688,8 +728,22 @@ const CSS = `  :root {
     transition: background 0.15s;
   }
   .cmd-row:hover { background: var(--surface-hover); }
+  .cmd-row.cmd-row-triple {
+    grid-template-columns: 180px 1.4fr 1fr;
+    gap: 1rem;
+  }
   .cmd-name { font-family: var(--mono); font-size: 0.8rem; font-weight: 600; white-space: nowrap; }
+  .cmd-row.cmd-row-triple .cmd-name { white-space: normal; }
   .cmd-desc { font-size: 0.82rem; color: var(--text-dim); line-height: 1.5; }
+  .cmd-extra {
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    line-height: 1.5;
+    font-style: italic;
+    border-left: 2px solid var(--border-bright);
+    padding-left: 0.7rem;
+    opacity: 0.9;
+  }
   .cmd-desc code {
     font-family: var(--mono); font-size: 0.75rem;
     background: var(--surface); padding: 0.1em 0.35em;
@@ -760,6 +814,13 @@ const CSS = `  :root {
   .s-docs .cmd-name { color: var(--yellow); }
   .s-architecture .section-icon { background: var(--indigo-dim); color: var(--indigo); }
   .s-architecture .cmd-name { color: var(--indigo); }
+
+  .s-antipattern .section-icon { background: var(--rose-dim); color: var(--rose); }
+  .s-antipattern .cmd-name { color: var(--rose); }
+  .s-antipattern .section-header { border-bottom: 1px solid rgba(251,113,133,0.2); }
+  .s-hidden .section-icon { background: var(--sky-dim); color: var(--sky); }
+  .s-hidden .cmd-name { color: var(--sky); }
+  .s-hidden .section-header { border-bottom: 1px solid rgba(56,189,248,0.2); }
 
   .subsection-label {
     font-family: var(--mono);
@@ -879,7 +940,8 @@ const CSS = `  :root {
   }
 
   @media (max-width: 700px) {
-    .cmd-row { grid-template-columns: 1fr; gap: 0.15rem; }
+    .cmd-row, .cmd-row.cmd-row-triple { grid-template-columns: 1fr; gap: 0.15rem; }
+    .cmd-extra { border-left: none; padding-left: 0; margin-top: 0.3rem; }
     .section-subtitle, .part-desc { display: none; }
     header h1 { font-size: 1.4rem; }
     .filter-bar { gap: 0.3rem; }

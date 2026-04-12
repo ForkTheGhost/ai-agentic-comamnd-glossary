@@ -127,8 +127,10 @@ function parseMarkdown(md) {
 
     // Part heading: "## Part I: ..." or "## Part II: ..."
     const partMatch = line.match(/^##\s+Part\s+(I{1,3}|IV|V?I{0,3}):/);
-    if (partMatch) {
-      part = partMatch[1];
+    // Third part: "## ⚠️ Special Sections"
+    const specialMatch = /^##\s+(?:\u26A0\uFE0F?\s*)?Special\s+Sections\s*$/.test(line);
+    if (partMatch || specialMatch) {
+      part = partMatch ? partMatch[1] : 'Special';
       section = null;
       sectionNum = null;
       subsection = null;
@@ -195,11 +197,12 @@ function parseMarkdown(md) {
     // Second row of a table is the separator.
     if (isSeparatorRow(row)) continue;
 
-    // Data row. Expect exactly two columns.
+    // Data row. Expect at least two columns.
     if (row.length < 2) continue;
 
     const nameCell = row[0];
-    const descCell = row.slice(1).join(' | ').trim();
+    const descCell = row[1].trim();
+    const extraCell = row.length >= 3 ? row.slice(2).join(' | ').trim() : '';
 
     const name = extractName(nameCell);
     const { description, aliases } = extractAliases(descCell);
@@ -207,7 +210,7 @@ function parseMarkdown(md) {
     // Build the entry per schema.
     const entry = { part };
 
-    if (part === 'II' && sectionNum) {
+    if ((part === 'II' || part === 'Special') && sectionNum) {
       entry.section_num = sectionNum;
     }
 
@@ -222,6 +225,14 @@ function parseMarkdown(md) {
 
     if (aliases && aliases.length > 0) {
       entry.aliases = aliases;
+    }
+
+    if (extraCell) {
+      // Use the 3rd header cell as the semantic label (e.g. "Detection Signal",
+      // "When to Use"). Normalize to snake_case for the JSON key.
+      const rawLabel = (tableHeader && tableHeader[2]) || 'extra';
+      const key = rawLabel.replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '') || 'extra';
+      entry[key] = extraCell;
     }
 
     commands.push(entry);
@@ -245,11 +256,12 @@ function main() {
 
   const partI = commands.filter((c) => c.part === 'I').length;
   const partII = commands.filter((c) => c.part === 'II').length;
+  const special = commands.filter((c) => c.part === 'Special').length;
   const withAliases = commands.filter((c) => c.aliases).length;
 
   process.stdout.write(
     `Wrote ${commands.length} commands to ${path.relative(REPO_ROOT, OUTPUT_FILE)} ` +
-      `(Part I: ${partI}, Part II: ${partII}, with aliases: ${withAliases})\n`
+      `(Part I: ${partI}, Part II: ${partII}, Special: ${special}, with aliases: ${withAliases})\n`
   );
 }
 

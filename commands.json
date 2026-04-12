@@ -1,7 +1,7 @@
 {
   "version": "2026-04",
   "source": "agentic-ai-complete-reference.md",
-  "generated_at": "2026-04-12T13:46:22.719Z",
+  "generated_at": "2026-04-12T14:13:41.816Z",
   "commands": [
     {
       "part": "I",
@@ -2710,6 +2710,357 @@
       "subsection": "E. Container & Platform Architecture",
       "name": "GitOps",
       "description": "Use Git as the single source of truth for infrastructure and application state. Pull-based reconciliation — ArgoCD, Flux."
+    },
+    {
+      "part": "Special",
+      "section_num": "XXII",
+      "section": "Failure Modes & Anti-Patterns",
+      "subsection": "A. Reasoning Failures",
+      "name": "Anchor Drift",
+      "description": "Agent fixates on an early assumption and keeps building on it even as evidence mounts that it's wrong. Sunk-cost reasoning.",
+      "detection_signal": "Output keeps referencing an early decision despite contradicting evidence. Agent resists Replan."
+    },
+    {
+      "part": "Special",
+      "section_num": "XXII",
+      "section": "Failure Modes & Anti-Patterns",
+      "subsection": "A. Reasoning Failures",
+      "name": "Premature Converge",
+      "description": "Agent locks onto the first plausible solution without exploring alternatives. The opposite of Self-Consistency.",
+      "detection_signal": "Solution appears suspiciously fast. No alternatives mentioned. No trade-off analysis."
+    },
+    {
+      "part": "Special",
+      "section_num": "XXII",
+      "section": "Failure Modes & Anti-Patterns",
+      "subsection": "A. Reasoning Failures",
+      "name": "Hallucinate Confidence",
+      "description": "Agent presents uncertain information with high confidence. Authoritative tone masks shaky reasoning.",
+      "detection_signal": "Claims without citations. Specific numbers/dates that weren't in the source material. \"Certainly\" and \"definitely\" on ambiguous topics."
+    },
+    {
+      "part": "Special",
+      "section_num": "XXII",
+      "section": "Failure Modes & Anti-Patterns",
+      "subsection": "A. Reasoning Failures",
+      "name": "Cargo Cult",
+      "description": "Agent copies a pattern it's seen work elsewhere without understanding *why*, applying it where it doesn't fit.",
+      "detection_signal": "Boilerplate that doesn't match the context. \"Best practice\" applied without considering constraints."
+    },
+    {
+      "part": "Special",
+      "section_num": "XXII",
+      "section": "Failure Modes & Anti-Patterns",
+      "subsection": "A. Reasoning Failures",
+      "name": "Sycophant Loop",
+      "description": "Agent agrees with the human's framing even when it's wrong, reinforcing a bad approach instead of pushing back.",
+      "detection_signal": "Agent never challenges assumptions. Every suggestion is \"great idea.\" Errors in the human's premise go unquestioned."
+    },
+    {
+      "part": "Special",
+      "section_num": "XXII",
+      "section": "Failure Modes & Anti-Patterns",
+      "subsection": "A. Reasoning Failures",
+      "name": "Confabulation Cascade",
+      "description": "Agent hallucinates a fact, then builds reasoning on top of it, then cites its own earlier reasoning as evidence. Self-reinforcing hallucination.",
+      "detection_signal": "Conclusions that trace back to unsourced claims from earlier in the same session."
+    },
+    {
+      "part": "Special",
+      "section_num": "XXII",
+      "section": "Failure Modes & Anti-Patterns",
+      "subsection": "B. Scope & Focus Failures",
+      "name": "Yak Shave",
+      "description": "Agent gets trapped in a dependency chain: to do A needs B, needs C, needs D... three levels deep solving the wrong problem.",
+      "detection_signal": "Agent's current task has no visible connection to the original goal. Multiple \"first I need to...\" transitions."
+    },
+    {
+      "part": "Special",
+      "section_num": "XXII",
+      "section": "Failure Modes & Anti-Patterns",
+      "subsection": "B. Scope & Focus Failures",
+      "name": "Scope Gallop",
+      "description": "Each turn subtly expands beyond the original ask. Task triples in size without explicit approval.",
+      "detection_signal": "Deliverable keeps growing. Agent adds features/tests/docs nobody asked for. \"While I'm at it...\" language."
+    },
+    {
+      "part": "Special",
+      "section_num": "XXII",
+      "section": "Failure Modes & Anti-Patterns",
+      "subsection": "B. Scope & Focus Failures",
+      "name": "Gold Plate",
+      "description": "Agent over-engineers beyond what was asked — adds tests nobody requested, refactors adjacent code, writes docs for a one-off script.",
+      "detection_signal": "Time/tokens spent is disproportionate to task complexity. Output has polish nobody needs."
+    },
+    {
+      "part": "Special",
+      "section_num": "XXII",
+      "section": "Failure Modes & Anti-Patterns",
+      "subsection": "B. Scope & Focus Failures",
+      "name": "Infinite Clarify",
+      "description": "Agent keeps asking clarifying questions instead of making a reasonable assumption and proceeding. Paralysis by over-specification.",
+      "detection_signal": "Multiple turns of questions before any work output. Questions about details that don't affect the approach."
+    },
+    {
+      "part": "Special",
+      "section_num": "XXII",
+      "section": "Failure Modes & Anti-Patterns",
+      "subsection": "B. Scope & Focus Failures",
+      "name": "Rabbit Hole",
+      "description": "Agent goes deep into an interesting tangent that's technically related but not on the critical path. Intellectual curiosity overrides task focus.",
+      "detection_signal": "Long, detailed output on a subtopic. Agent seems engaged but isn't making progress toward the goal."
+    },
+    {
+      "part": "Special",
+      "section_num": "XXII",
+      "section": "Failure Modes & Anti-Patterns",
+      "subsection": "C. Context & Memory Failures",
+      "name": "Ghost Context",
+      "description": "Information the agent *should* have but doesn't — it was in a previous session, different agent's context, or the human's head.",
+      "detection_signal": "Agent asks about something that was already discussed. Agent re-derives information that was previously established."
+    },
+    {
+      "part": "Special",
+      "section_num": "XXII",
+      "section": "Failure Modes & Anti-Patterns",
+      "subsection": "C. Context & Memory Failures",
+      "name": "Context Poisoning",
+      "description": "Bad information enters the context (wrong file, outdated doc, hallucinated fact) and corrupts all downstream reasoning.",
+      "detection_signal": "Conclusions that logically follow from the context but are factually wrong. Agent confidently builds on incorrect premises."
+    },
+    {
+      "part": "Special",
+      "section_num": "XXII",
+      "section": "Failure Modes & Anti-Patterns",
+      "subsection": "C. Context & Memory Failures",
+      "name": "Stale Plan",
+      "description": "Foreman keeps executing the original plan after the situation has changed. The plan was right when made; it's wrong now.",
+      "detection_signal": "Tasks being executed that no longer make sense. Agent outputs that don't account for recent discoveries."
+    },
+    {
+      "part": "Special",
+      "section_num": "XXII",
+      "section": "Failure Modes & Anti-Patterns",
+      "subsection": "C. Context & Memory Failures",
+      "name": "Echo Chamber",
+      "description": "In multi-agent setups, agents reinforce each other's errors because they share context or were seeded with the same assumptions.",
+      "detection_signal": "Multiple agents arrive at the same wrong conclusion. Disagreement is suspiciously absent."
+    },
+    {
+      "part": "Special",
+      "section_num": "XXII",
+      "section": "Failure Modes & Anti-Patterns",
+      "subsection": "C. Context & Memory Failures",
+      "name": "Context Thrash",
+      "description": "Agent repeatedly loads, evicts, and reloads the same context because it can't decide what's relevant. Burns tokens without progress.",
+      "detection_signal": "High token usage with low output quality. Repeated references to the same files/concepts."
+    },
+    {
+      "part": "Special",
+      "section_num": "XXII",
+      "section": "Failure Modes & Anti-Patterns",
+      "subsection": "D. Multi-Agent Failures",
+      "name": "Deadlock",
+      "description": "Two or more agents are each waiting for the other to finish before they can proceed. No progress.",
+      "detection_signal": "Multiple agents show \"blocked\" status simultaneously. No task state changes over multiple Poll cycles."
+    },
+    {
+      "part": "Special",
+      "section_num": "XXII",
+      "section": "Failure Modes & Anti-Patterns",
+      "subsection": "D. Multi-Agent Failures",
+      "name": "Thundering Herd",
+      "description": "Multiple agents simultaneously attempt the same action (API call, file write, resource acquisition), causing contention or failure.",
+      "detection_signal": "Concurrent modification errors. Rate limit hits. Merge conflicts."
+    },
+    {
+      "part": "Special",
+      "section_num": "XXII",
+      "section": "Failure Modes & Anti-Patterns",
+      "subsection": "D. Multi-Agent Failures",
+      "name": "Silent Failure",
+      "description": "Agent fails but doesn't report it — continues with partial results or quietly skips the failed step.",
+      "detection_signal": "Output is subtly incomplete. Missing sections nobody noticed. Downstream agents working with partial data."
+    },
+    {
+      "part": "Special",
+      "section_num": "XXII",
+      "section": "Failure Modes & Anti-Patterns",
+      "subsection": "D. Multi-Agent Failures",
+      "name": "Authority Confusion",
+      "description": "Multiple agents believe they own the same resource or decision. Conflicting edits, contradictory outputs.",
+      "detection_signal": "Same file modified by multiple agents. Conflicting instructions given to downstream agents."
+    },
+    {
+      "part": "Special",
+      "section_num": "XXII",
+      "section": "Failure Modes & Anti-Patterns",
+      "subsection": "D. Multi-Agent Failures",
+      "name": "Zombie Agent",
+      "description": "Agent appears alive (Heartbeat passes) but isn't making meaningful progress — spinning, looping, or producing garbage.",
+      "detection_signal": "Heartbeat OK but no task state changes. Token usage high but no useful output."
+    },
+    {
+      "part": "Special",
+      "section_num": "XXIII",
+      "section": "Unnamed & Emerging Patterns",
+      "subsection": "A. Hidden Productivity Patterns",
+      "name": "Rubber Duck",
+      "description": "Explain the problem to the agent not because you need its answer, but because articulating the problem reveals the solution. The agent is a forcing function for your own thinking.",
+      "when_to_use": "When you're stuck and can't see the path forward. The act of writing the prompt IS the work."
+    },
+    {
+      "part": "Special",
+      "section_num": "XXIII",
+      "section": "Unnamed & Emerging Patterns",
+      "subsection": "A. Hidden Productivity Patterns",
+      "name": "Shotgun Debug",
+      "description": "Throw the entire error log, stack trace, and surrounding context at the agent with no decomposition. Just raw context dump + \"figure it out.\" Works surprisingly often.",
+      "when_to_use": "When the error is opaque and you don't know where to start. Let the agent's pattern matching work."
+    },
+    {
+      "part": "Special",
+      "section_num": "XXIII",
+      "section": "Unnamed & Emerging Patterns",
+      "subsection": "A. Hidden Productivity Patterns",
+      "name": "Warm-Up Prompt",
+      "description": "Give the agent a low-stakes task in the domain before the real task — \"summarize this codebase\" before \"refactor this module.\" Builds context and calibrates the agent's mental model.",
+      "when_to_use": "Before complex tasks in unfamiliar codebases. The warm-up is cheap; the calibration is valuable."
+    },
+    {
+      "part": "Special",
+      "section_num": "XXIII",
+      "section": "Unnamed & Emerging Patterns",
+      "subsection": "A. Hidden Productivity Patterns",
+      "name": "Inversion Prompt",
+      "description": "Instead of asking \"how should I build X,\" ask \"what are all the ways X could fail?\" The failure analysis reveals the design requirements.",
+      "when_to_use": "Architecture and design phases. The failure modes ARE the specification."
+    },
+    {
+      "part": "Special",
+      "section_num": "XXIII",
+      "section": "Unnamed & Emerging Patterns",
+      "subsection": "A. Hidden Productivity Patterns",
+      "name": "Breadcrumb Trail",
+      "description": "Leave deliberate markers in your code/docs that future agents will find and follow — comments like `// AGENT: this connects to the auth service via OIDC` or `<!-- CONTEXT: this decision was made because of HIPAA §164.312 -->`.",
+      "when_to_use": "Any codebase where agents will work repeatedly. Invest now, save context-loading costs forever."
+    },
+    {
+      "part": "Special",
+      "section_num": "XXIII",
+      "section": "Unnamed & Emerging Patterns",
+      "subsection": "A. Hidden Productivity Patterns",
+      "name": "Throwaway Agent",
+      "description": "Spawn an agent specifically to explore a dead-end approach, knowing you'll discard the output. The value is confirming \"that path doesn't work\" so you can commit to the right one.",
+      "when_to_use": "When two approaches seem equally viable and you need to eliminate one. Cheaper than debating."
+    },
+    {
+      "part": "Special",
+      "section_num": "XXIII",
+      "section": "Unnamed & Emerging Patterns",
+      "subsection": "B. Advanced Multi-Agent Strategies",
+      "name": "Shadow Agent",
+      "description": "Run a second agent on the same task independently with different context or model. Use divergence between outputs as a quality signal.",
+      "when_to_use": "High-stakes tasks where correctness matters more than speed. The diff between two independent solutions reveals blind spots."
+    },
+    {
+      "part": "Special",
+      "section_num": "XXIII",
+      "section": "Unnamed & Emerging Patterns",
+      "subsection": "B. Advanced Multi-Agent Strategies",
+      "name": "Speculative Execute",
+      "description": "Start work on a likely-needed task before it's officially assigned, betting the foreman will need it. CPU branch prediction for agents.",
+      "when_to_use": "When the dependency graph is predictable. If the bet pays off, you saved wall-clock time. If not, discard is cheap."
+    },
+    {
+      "part": "Special",
+      "section_num": "XXIII",
+      "section": "Unnamed & Emerging Patterns",
+      "subsection": "B. Advanced Multi-Agent Strategies",
+      "name": "Consensus Fork",
+      "description": "When agents disagree, don't pick a winner — fork the pipeline and pursue both approaches in parallel until one proves itself through testing or validation.",
+      "when_to_use": "When the disagreement is about approach, not facts. Let reality pick the winner instead of debate."
+    },
+    {
+      "part": "Special",
+      "section_num": "XXIII",
+      "section": "Unnamed & Emerging Patterns",
+      "subsection": "B. Advanced Multi-Agent Strategies",
+      "name": "Context Handwarmer",
+      "description": "Pre-load an agent with relevant context before assigning its task, so when the task arrives, the agent is already \"warm\" and doesn't waste tokens on discovery.",
+      "when_to_use": "When you know what tasks are coming and can prepare agents ahead of time. Batch the context loading."
+    },
+    {
+      "part": "Special",
+      "section_num": "XXIII",
+      "section": "Unnamed & Emerging Patterns",
+      "subsection": "B. Advanced Multi-Agent Strategies",
+      "name": "Progressive Disclosure",
+      "description": "Give the agent minimal context first, let it ask for what it needs, and inject on demand. The opposite of Prefill. Reduces noise.",
+      "when_to_use": "Exploratory tasks where you don't know what context will be relevant. Let the agent's questions guide the context."
+    },
+    {
+      "part": "Special",
+      "section_num": "XXIII",
+      "section": "Unnamed & Emerging Patterns",
+      "subsection": "B. Advanced Multi-Agent Strategies",
+      "name": "Canary Prompt",
+      "description": "Before running a prompt at scale (e.g., `/batch` across 50 files), test it on 2-3 representative files first to verify the output quality and catch prompt bugs.",
+      "when_to_use": "Before any batch operation. The prompt is code — test it before deploying."
+    },
+    {
+      "part": "Special",
+      "section_num": "XXIII",
+      "section": "Unnamed & Emerging Patterns",
+      "subsection": "C. Cognitive & Metacognitive Patterns",
+      "name": "Token Budget",
+      "description": "Explicitly allocate a token budget to a task and treat it like money. Agent must complete within budget or request an extension with justification.",
+      "when_to_use": "Long-running tasks, expensive models, cost-sensitive environments. Forces efficiency and prevents runaway sessions."
+    },
+    {
+      "part": "Special",
+      "section_num": "XXIII",
+      "section": "Unnamed & Emerging Patterns",
+      "subsection": "C. Cognitive & Metacognitive Patterns",
+      "name": "Entropy Check",
+      "description": "Measure how \"confused\" an agent is by looking at reasoning quality, response length, confidence signals, and number of self-corrections. High entropy = struggling.",
+      "when_to_use": "During the foreman's Poll cycle. High entropy is an early warning to intervene before the agent wastes tokens."
+    },
+    {
+      "part": "Special",
+      "section_num": "XXIII",
+      "section": "Unnamed & Emerging Patterns",
+      "subsection": "C. Cognitive & Metacognitive Patterns",
+      "name": "Temporal Fence",
+      "description": "A constraint that changes over time — \"before Friday this is a draft, after Friday it's locked.\" Time-aware guard rails that evolve with the project lifecycle.",
+      "when_to_use": "Governance workflows, release management, compliance deadlines. The rules change based on where you are in the timeline."
+    },
+    {
+      "part": "Special",
+      "section_num": "XXIII",
+      "section": "Unnamed & Emerging Patterns",
+      "subsection": "C. Cognitive & Metacognitive Patterns",
+      "name": "Negative Space",
+      "description": "Deliberately define what the agent should NOT explore, NOT touch, NOT change. The absence of action is itself a design decision.",
+      "when_to_use": "Any task near production systems, sensitive data, or shared infrastructure. \"Do not modify anything in `/prod`\" is as important as the task itself."
+    },
+    {
+      "part": "Special",
+      "section_num": "XXIII",
+      "section": "Unnamed & Emerging Patterns",
+      "subsection": "C. Cognitive & Metacognitive Patterns",
+      "name": "Perspective Shift",
+      "description": "Ask the agent to re-evaluate its own output from a different persona's viewpoint — \"now review this as a security auditor\" or \"would a junior developer understand this?\"",
+      "when_to_use": "After draft completion. Cheap way to catch blind spots without spawning a separate review agent."
+    },
+    {
+      "part": "Special",
+      "section_num": "XXIII",
+      "section": "Unnamed & Emerging Patterns",
+      "subsection": "C. Cognitive & Metacognitive Patterns",
+      "name": "Exit Criteria",
+      "description": "Define upfront exactly what \"done\" looks like AND what \"good enough\" looks like. Two thresholds — the agent aims for \"done\" but can stop at \"good enough\" if budget is tight.",
+      "when_to_use": "Every task. Without Exit Criteria, agents either Gold Plate or deliver incomplete work. Spec's acceptance criteria should include both thresholds."
     }
   ]
 }

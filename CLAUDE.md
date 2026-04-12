@@ -27,9 +27,10 @@ Both are plain Node.js with no dependencies — no `package.json`, no `npm insta
 ## Document Structure
 
 - **Part I — Claude Code: Practical Commands.** Named `###` sections (Session Management, Context & Information, Model & Mode Control, Configuration, Extensions, CLI Flags, Keyboard Shortcuts, Skills, etc.), each a table of `command → description` pairs.
-- **Part II — Universal AI Agent Command Glossary.** Roman-numeraled `###` sections (currently `I.` through `XXI.`). Larger sections use `####` lettered subsections (`A.`, `B.`, ...). When adding a new topic, continue the Roman-numeral sequence; never renumber existing entries (breaks anchor links and changelog references).
+- **Part II — Universal AI Agent Command Glossary.** Roman-numeraled `###` sections (`I.` through `XXI.`). Larger sections use `####` lettered subsections (`A.`, `B.`, ...).
+- **Special Sections** (a third `##` group, marked `## ⚠️ Special Sections`) — continues the Roman-numeral sequence (XXII, XXIII) but uses **3-column tables** and has distinct visual treatment. Currently holds anti-patterns (`XXII`, failure modes with a Detection Signal column) and hidden patterns (`XXIII`, informal practices with a When-to-Use column). These entries are NOT commands to execute — they're failure modes to watch for and instinctive strategies to codify.
 
-When adding a new Part II section, you must also extend `PART_II_SECTIONS` in `scripts/build.js` (Roman numeral → class, icon, tip tone) AND add a matching `.s-<cls>` CSS rule in that file. The build throws `No metadata for section ...` otherwise — fail-fast, not silent.
+When adding a new numbered section (Part II or Special), you must also extend `PART_II_SECTIONS` in `scripts/build.js` (Roman numeral → class, icon, tip tone) AND add a matching `.s-<cls>` CSS rule in that file. The build throws `No metadata for section ...` otherwise — fail-fast, not silent. Never renumber existing entries (breaks anchor links and changelog references).
 
 Part II §X contains an ASCII-art lifecycle diagram inside a fenced code block — deliberate visual element, preserved by the build as a styled `<pre>` block.
 
@@ -41,6 +42,7 @@ Part II §X contains an ASCII-art lifecycle diagram inside a fenced code block �
 - Tip callouts use `> 💡 ...` — the only emoji used in-content.
 - Section dividers are `---` on their own line.
 - A literal `|` inside a table cell must be escaped as `\|` (standard Markdown) — e.g., `` `/fast [on\|off]` ``. Both generators handle the escape.
+- **3-column tables** (used in Special Sections XXII, XXIII) are automatically rendered with a third `.cmd-extra` column. The JSON exporter uses the 3rd header cell (lowercased and snake_cased) as the key name — so `| ... | ... | Detection Signal |` becomes `detection_signal` in the JSON entry.
 - The document carries a date line near the top (currently "April 2026"); bump only on substantive revisions.
 
 ## Build Script Notes
