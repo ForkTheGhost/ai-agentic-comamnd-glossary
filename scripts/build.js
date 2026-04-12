@@ -46,6 +46,17 @@ const PART_II_SECTIONS = {
   'VIII': { cls: 'collaboration', icon: '\uD83E\uDD1D',       cat: 'collaboration', tipTone: 'fuchsia' },
   'IX':   { cls: 'foreman',       icon: '\uD83D\uDC77',       cat: 'foreman',       tipTone: 'amber'   },
   'X':    { cls: 'foreman',       icon: '\uD83D\uDD04',       cat: 'foreman',       tipTone: 'amber'   },
+  'XI':   { cls: 'errors',        icon: '\uD83D\uDEA8',       cat: 'errors',        tipTone: 'rose'    },
+  'XII':  { cls: 'contexteng',    icon: '\uD83E\uDDE9',       cat: 'contexteng',    tipTone: 'blue'    },
+  'XIII': { cls: 'observability', icon: '\uD83D\uDD0D',       cat: 'observability', tipTone: 'sky'     },
+  'XIV':  { cls: 'comms',         icon: '\uD83D\uDCE1',       cat: 'comms',         tipTone: 'fuchsia' },
+  'XV':   { cls: 'security',      icon: '\uD83D\uDD12',       cat: 'security',      tipTone: 'red'     },
+  'XVI':  { cls: 'prompt',        icon: '\uD83D\uDCDD',       cat: 'prompt',        tipTone: 'pink'    },
+  'XVII': { cls: 'humanloop',     icon: '\uD83D\uDC64',       cat: 'humanloop',     tipTone: 'teal'    },
+  'XVIII':{ cls: 'sdlc',          icon: '\uD83D\uDD04',       cat: 'sdlc',          tipTone: 'green'   },
+  'XIX':  { cls: 'infrasec',      icon: '\uD83C\uDFD7\uFE0F', cat: 'infrasec',      tipTone: 'orange'  },
+  'XX':   { cls: 'docs',          icon: '\uD83D\uDCD6',       cat: 'docs',          tipTone: 'yellow'  },
+  'XXI':  { cls: 'architecture',  icon: '\uD83C\uDFDB\uFE0F', cat: 'architecture',  tipTone: 'indigo'  },
 };
 
 const FILTER_BUTTONS_P1 = [
@@ -682,6 +693,29 @@ const CSS = `  :root {
   .s-foreman .section-icon { background: linear-gradient(135deg, var(--amber-dim), var(--orange-dim)); color: var(--amber); }
   .s-foreman .cmd-name { color: var(--amber); }
   .s-foreman .section-header { border-bottom: 1px solid rgba(251,191,36,0.2); }
+
+  .s-errors .section-icon { background: var(--rose-dim); color: var(--rose); }
+  .s-errors .cmd-name { color: var(--rose); }
+  .s-contexteng .section-icon { background: var(--blue-dim); color: var(--blue); }
+  .s-contexteng .cmd-name { color: var(--blue); }
+  .s-observability .section-icon { background: var(--sky-dim); color: var(--sky); }
+  .s-observability .cmd-name { color: var(--sky); }
+  .s-comms .section-icon { background: var(--fuchsia-dim); color: var(--fuchsia); }
+  .s-comms .cmd-name { color: var(--fuchsia); }
+  .s-security .section-icon { background: var(--red-dim); color: var(--red); }
+  .s-security .cmd-name { color: var(--red); }
+  .s-prompt .section-icon { background: var(--pink-dim); color: var(--pink); }
+  .s-prompt .cmd-name { color: var(--pink); }
+  .s-humanloop .section-icon { background: var(--teal-dim); color: var(--teal); }
+  .s-humanloop .cmd-name { color: var(--teal); }
+  .s-sdlc .section-icon { background: var(--green-dim); color: var(--green); }
+  .s-sdlc .cmd-name { color: var(--green); }
+  .s-infrasec .section-icon { background: var(--orange-dim); color: var(--orange); }
+  .s-infrasec .cmd-name { color: var(--orange); }
+  .s-docs .section-icon { background: var(--yellow-dim); color: var(--yellow); }
+  .s-docs .cmd-name { color: var(--yellow); }
+  .s-architecture .section-icon { background: var(--indigo-dim); color: var(--indigo); }
+  .s-architecture .cmd-name { color: var(--indigo); }
 
   .subsection-label {
     font-family: var(--mono);

@@ -27,7 +27,9 @@ Both are plain Node.js with no dependencies — no `package.json`, no `npm insta
 ## Document Structure
 
 - **Part I — Claude Code: Practical Commands.** Named `###` sections (Session Management, Context & Information, Model & Mode Control, Configuration, Extensions, CLI Flags, Keyboard Shortcuts, Skills, etc.), each a table of `command → description` pairs.
-- **Part II — Universal AI Agent Command Glossary.** Roman-numeraled `###` sections (`I.` through `X.` at time of writing). Larger sections use `####` lettered subsections (`A.`, `B.`, ...). When adding a new topic, continue the Roman-numeral sequence; never renumber existing entries (breaks anchor links and changelog references).
+- **Part II — Universal AI Agent Command Glossary.** Roman-numeraled `###` sections (currently `I.` through `XXI.`). Larger sections use `####` lettered subsections (`A.`, `B.`, ...). When adding a new topic, continue the Roman-numeral sequence; never renumber existing entries (breaks anchor links and changelog references).
+
+When adding a new Part II section, you must also extend `PART_II_SECTIONS` in `scripts/build.js` (Roman numeral → class, icon, tip tone) AND add a matching `.s-<cls>` CSS rule in that file. The build throws `No metadata for section ...` otherwise — fail-fast, not silent.
 
 Part II §X contains an ASCII-art lifecycle diagram inside a fenced code block — deliberate visual element, preserved by the build as a styled `<pre>` block.
 

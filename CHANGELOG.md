@@ -6,6 +6,27 @@ The document itself is dated at the top (currently "April 2026") and updated onl
 
 ## [Unreleased]
 
+## 2026-04-12 (second revision)
+
+### Added
+- Part II §§ XI–XXI — 11 new conceptual sections totaling ~205 commands:
+  - XI. Error Handling & Recovery
+  - XII. Context Engineering
+  - XIII. Observability & Debugging
+  - XIV. Inter-Agent Communication
+  - XV. Security & Trust
+  - XVI. Prompt Architecture
+  - XVII. Human-in-the-Loop Patterns
+  - XVIII. SDLC Commands
+  - XIX. Infrastructure & Security Operations
+  - XX. Document Writing & Composition
+  - XXI. Architecture Disciplines
+- `scripts/build.js` — section metadata and CSS rules extended for the 11 new sections
+
+### Changed
+- Total command count: 167 → 372
+- Part I section renames normalized (`Configuration` → `Configuration & Permissions`, `Extensions` → `Extensions & Integrations`)
+
 ## 2026-04-12
 
 ### Added

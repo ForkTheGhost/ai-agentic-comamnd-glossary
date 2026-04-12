@@ -1,7 +1,7 @@
 {
   "version": "2026-04",
   "source": "agentic-ai-complete-reference.md",
-  "generated_at": "2026-04-12T13:26:23.232Z",
+  "generated_at": "2026-04-12T13:46:22.719Z",
   "commands": [
     {
       "part": "I",
@@ -1127,6 +1127,1589 @@
       "section": "Mapping Foreman Commands to Claude Code",
       "name": "Retrospect",
       "description": "`/compact` the session with a focus on \"what worked and what didn't\" → `/memory` to persist."
+    },
+    {
+      "part": "II",
+      "section_num": "XI",
+      "section": "Error Handling & Recovery",
+      "name": "Timeout",
+      "description": "Agent exceeded its time or token budget. Distinct from Abort (intentional) — Timeout is the system catching a runaway."
+    },
+    {
+      "part": "II",
+      "section_num": "XI",
+      "section": "Error Handling & Recovery",
+      "name": "Fallback",
+      "description": "When the primary approach fails, switch to a degraded but functional alternative (e.g., Opus fails → retry with Sonnet)."
+    },
+    {
+      "part": "II",
+      "section_num": "XI",
+      "section": "Error Handling & Recovery",
+      "name": "Replay",
+      "description": "Re-run a failed sequence from a checkpoint with modified parameters. Distinct from Retry (single tool call) — Replay re-executes a full sub-workflow."
+    },
+    {
+      "part": "II",
+      "section_num": "XI",
+      "section": "Error Handling & Recovery",
+      "name": "Degrade",
+      "description": "Reduce scope or quality to keep the pipeline moving when a component is unavailable (e.g., skip optional validation, use cached data)."
+    },
+    {
+      "part": "II",
+      "section_num": "XI",
+      "section": "Error Handling & Recovery",
+      "name": "Dead Letter",
+      "description": "Capture failed tasks with their full context (inputs, state, error) into a holding queue for later diagnosis and manual retry."
+    },
+    {
+      "part": "II",
+      "section_num": "XI",
+      "section": "Error Handling & Recovery",
+      "name": "Circuit Break",
+      "description": "After N consecutive failures on the same operation, stop retrying and fail fast. Prevents infinite retry loops and token burn."
+    },
+    {
+      "part": "II",
+      "section_num": "XI",
+      "section": "Error Handling & Recovery",
+      "name": "Compensate",
+      "description": "Undo the side effects of a partially-completed sequence that failed midway (e.g., rollback a DB migration, revert a partial commit)."
+    },
+    {
+      "part": "II",
+      "section_num": "XII",
+      "section": "Context Engineering",
+      "name": "Window",
+      "description": "Actively manage what's in the agent's context window — what gets included, summarized, or dropped at any given moment."
+    },
+    {
+      "part": "II",
+      "section_num": "XII",
+      "section": "Context Engineering",
+      "name": "Inject",
+      "description": "Push specific knowledge into an agent's context right before it needs it — just-in-time context, not load-everything-upfront."
+    },
+    {
+      "part": "II",
+      "section_num": "XII",
+      "section": "Context Engineering",
+      "name": "Compress",
+      "description": "Reduce context size without losing critical information. Different from Prune (which drops things) — Compress keeps everything but smaller."
+    },
+    {
+      "part": "II",
+      "section_num": "XII",
+      "section": "Context Engineering",
+      "name": "Isolate",
+      "description": "Prevent context contamination between tasks. One agent's debugging output shouldn't pollute another agent's clean working context."
+    },
+    {
+      "part": "II",
+      "section_num": "XII",
+      "section": "Context Engineering",
+      "name": "Hydrate",
+      "description": "Reconstruct full context from a checkpoint or summary when resuming work. The inverse of Compress — expand a compressed state back to working detail."
+    },
+    {
+      "part": "II",
+      "section_num": "XII",
+      "section": "Context Engineering",
+      "name": "Prefill",
+      "description": "Pre-populate an agent's context with structured background (architecture docs, API schemas, conventions) before it receives its task."
+    },
+    {
+      "part": "II",
+      "section_num": "XII",
+      "section": "Context Engineering",
+      "name": "Evict",
+      "description": "Forcibly remove a specific piece of context that's causing confusion or anchoring the agent to a wrong approach. More surgical than Prune."
+    },
+    {
+      "part": "II",
+      "section_num": "XII",
+      "section": "Context Engineering",
+      "name": "Snapshot",
+      "description": "Capture the exact context state at a point in time for reproducibility — if you need to debug why an agent made a decision, replay from the snapshot."
+    },
+    {
+      "part": "II",
+      "section_num": "XIII",
+      "section": "Observability & Debugging",
+      "name": "Trace",
+      "description": "Follow the full execution path across agents — which agent touched what, in what order, with what inputs and outputs."
+    },
+    {
+      "part": "II",
+      "section_num": "XIII",
+      "section": "Observability & Debugging",
+      "name": "Diff State",
+      "description": "Compare the state at two points in the pipeline to find where things diverged from expectations."
+    },
+    {
+      "part": "II",
+      "section_num": "XIII",
+      "section": "Observability & Debugging",
+      "name": "Replay Dry",
+      "description": "Re-run a sequence in read-only mode to observe behavior without side effects. For understanding, not fixing."
+    },
+    {
+      "part": "II",
+      "section_num": "XIII",
+      "section": "Observability & Debugging",
+      "name": "Cost Audit",
+      "description": "Break down token/time/money spent per agent, per task, per phase. Essential for optimization and budget enforcement."
+    },
+    {
+      "part": "II",
+      "section_num": "XIII",
+      "section": "Observability & Debugging",
+      "name": "Blame",
+      "description": "Given a bad output, trace back to the specific agent and decision that caused it — like `git blame` for agent pipelines."
+    },
+    {
+      "part": "II",
+      "section_num": "XIII",
+      "section": "Observability & Debugging",
+      "name": "Profile",
+      "description": "Identify bottlenecks — which agents are slow, which tasks consume disproportionate context, where the pipeline stalls."
+    },
+    {
+      "part": "II",
+      "section_num": "XIII",
+      "section": "Observability & Debugging",
+      "name": "Canary",
+      "description": "Run a new agent configuration on a small subset of tasks before rolling it out to the full pipeline. Catches regressions early."
+    },
+    {
+      "part": "II",
+      "section_num": "XIII",
+      "section": "Observability & Debugging",
+      "name": "Assert",
+      "description": "Place runtime assertions at key points in the pipeline — \"after this step, X should be true\" — and halt if they fail."
+    },
+    {
+      "part": "II",
+      "section_num": "XIV",
+      "section": "Inter-Agent Communication",
+      "name": "Message",
+      "description": "Direct agent-to-agent communication — structured request/response between two specific agents."
+    },
+    {
+      "part": "II",
+      "section_num": "XIV",
+      "section": "Inter-Agent Communication",
+      "name": "Queue",
+      "description": "Async task queue that agents pull from. Decouples producers from consumers — agents work at their own pace."
+    },
+    {
+      "part": "II",
+      "section_num": "XIV",
+      "section": "Inter-Agent Communication",
+      "name": "Publish / Subscribe",
+      "description": "Agents subscribe to event types and react when relevant events fire. Looser coupling than Broadcast (which pushes to all)."
+    },
+    {
+      "part": "II",
+      "section_num": "XIV",
+      "section": "Inter-Agent Communication",
+      "name": "Shared State",
+      "description": "A mutable data structure multiple agents can read and write — the BOARD.md / task-list pattern from the foreman section."
+    },
+    {
+      "part": "II",
+      "section_num": "XIV",
+      "section": "Inter-Agent Communication",
+      "name": "Contract",
+      "description": "Define the expected input/output schema between agents so they can work independently without tight coupling."
+    },
+    {
+      "part": "II",
+      "section_num": "XIV",
+      "section": "Inter-Agent Communication",
+      "name": "Pipe",
+      "description": "Chain agent outputs directly into the next agent's input — like Unix pipes for agent workflows."
+    },
+    {
+      "part": "II",
+      "section_num": "XIV",
+      "section": "Inter-Agent Communication",
+      "name": "Barrier",
+      "description": "A synchronization point where all agents must arrive before any can proceed. Enforces phase boundaries."
+    },
+    {
+      "part": "II",
+      "section_num": "XIV",
+      "section": "Inter-Agent Communication",
+      "name": "Mailbox",
+      "description": "Per-agent inbox that accumulates messages while the agent is busy. Agent processes them when it's ready, not when they arrive."
+    },
+    {
+      "part": "II",
+      "section_num": "XV",
+      "section": "Security & Trust",
+      "name": "Least Privilege",
+      "description": "Each agent gets only the permissions it needs for its specific task — no shared superuser context."
+    },
+    {
+      "part": "II",
+      "section_num": "XV",
+      "section": "Security & Trust",
+      "name": "Audit Trail",
+      "description": "Immutable, append-only log of every action every agent took — who did what, when, with what inputs. For compliance and forensics."
+    },
+    {
+      "part": "II",
+      "section_num": "XV",
+      "section": "Security & Trust",
+      "name": "Secret Scope",
+      "description": "Secrets are injected per-agent, not shared globally. An agent building a UI never sees the CyberArk credentials the provisioning agent uses."
+    },
+    {
+      "part": "II",
+      "section_num": "XV",
+      "section": "Security & Trust",
+      "name": "Trust Boundary",
+      "description": "Define which agents can communicate with which, and what data is allowed to cross boundaries."
+    },
+    {
+      "part": "II",
+      "section_num": "XV",
+      "section": "Security & Trust",
+      "name": "Attest",
+      "description": "An agent proves its output hasn't been tampered with — integrity verification for multi-agent chains (e.g., hash of output + agent ID)."
+    },
+    {
+      "part": "II",
+      "section_num": "XV",
+      "section": "Security & Trust",
+      "name": "Redact",
+      "description": "Strip sensitive data from agent outputs before they're passed to other agents or logged. PII, secrets, tokens never leak downstream."
+    },
+    {
+      "part": "II",
+      "section_num": "XV",
+      "section": "Security & Trust",
+      "name": "Sandbox Escape Check",
+      "description": "Verify that a sandboxed agent hasn't broken out of its execution boundary — file access, network calls, privilege escalation."
+    },
+    {
+      "part": "II",
+      "section_num": "XV",
+      "section": "Security & Trust",
+      "name": "Provenance",
+      "description": "Tag every output with its origin — which agent, which model, which version, which inputs produced it. Chain of custody for generated artifacts."
+    },
+    {
+      "part": "II",
+      "section_num": "XV",
+      "section": "Security & Trust",
+      "name": "Rotate",
+      "description": "Periodically rotate credentials, tokens, and API keys used by long-running agents. Prevents stale credential accumulation."
+    },
+    {
+      "part": "II",
+      "section_num": "XVI",
+      "section": "Prompt Architecture",
+      "name": "Template",
+      "description": "Reusable prompt structures with variable slots. Your custom skills in `~/.claude/skills/` are exactly this pattern."
+    },
+    {
+      "part": "II",
+      "section_num": "XVI",
+      "section": "Prompt Architecture",
+      "name": "Persona",
+      "description": "Assign a role/expertise frame to shape an agent's reasoning — \"you are a SailPoint IIQ expert\" vs \"you are a security auditor.\""
+    },
+    {
+      "part": "II",
+      "section_num": "XVI",
+      "section": "Prompt Architecture",
+      "name": "Constrain Output",
+      "description": "Specify format, length, and structure of the response — JSON schema, Given/When/Then, Mermaid, XML, table."
+    },
+    {
+      "part": "II",
+      "section_num": "XVI",
+      "section": "Prompt Architecture",
+      "name": "Few-Shot",
+      "description": "Provide examples of correct input→output pairs to calibrate behavior. 2-3 examples dramatically improve consistency."
+    },
+    {
+      "part": "II",
+      "section_num": "XVI",
+      "section": "Prompt Architecture",
+      "name": "System Prompt",
+      "description": "The persistent instructions that frame every interaction. CLAUDE.md is literally this — project-wide System Prompt."
+    },
+    {
+      "part": "II",
+      "section_num": "XVI",
+      "section": "Prompt Architecture",
+      "name": "Chain Prompt",
+      "description": "Break a complex prompt into sequential stages where each stage's output feeds the next. Reduces hallucination in long-reasoning tasks."
+    },
+    {
+      "part": "II",
+      "section_num": "XVI",
+      "section": "Prompt Architecture",
+      "name": "Negative Prompt",
+      "description": "Explicitly state what the agent should NOT do. \"Do not modify any files outside `/src`.\" \"Do not use deprecated API v1 endpoints.\""
+    },
+    {
+      "part": "II",
+      "section_num": "XVI",
+      "section": "Prompt Architecture",
+      "name": "Meta-Prompt",
+      "description": "A prompt that generates other prompts — \"write me a SKILL.md that does X.\" Used to bootstrap new skills and custom commands."
+    },
+    {
+      "part": "II",
+      "section_num": "XVI",
+      "section": "Prompt Architecture",
+      "name": "Calibrate",
+      "description": "Test a prompt against known-good inputs to verify it produces expected outputs before deploying it in a pipeline."
+    },
+    {
+      "part": "II",
+      "section_num": "XVII",
+      "section": "Human-in-the-Loop Patterns",
+      "name": "Review",
+      "description": "Human inspects output before it progresses — async, non-blocking. Work continues on other tasks while review is pending."
+    },
+    {
+      "part": "II",
+      "section_num": "XVII",
+      "section": "Human-in-the-Loop Patterns",
+      "name": "Approve",
+      "description": "Human gives explicit go/no-go — blocking. Pipeline halts until the human responds. Use sparingly."
+    },
+    {
+      "part": "II",
+      "section_num": "XVII",
+      "section": "Human-in-the-Loop Patterns",
+      "name": "Steer",
+      "description": "Human provides mid-flight course correction without restarting — \"actually, use the v2 API instead.\""
+    },
+    {
+      "part": "II",
+      "section_num": "XVII",
+      "section": "Human-in-the-Loop Patterns",
+      "name": "Override",
+      "description": "Human manually replaces an agent's output with their own. The pipeline continues with the human's version."
+    },
+    {
+      "part": "II",
+      "section_num": "XVII",
+      "section": "Human-in-the-Loop Patterns",
+      "name": "Annotate",
+      "description": "Human adds notes or context to agent output for downstream agents to consume. Enriches without replacing."
+    },
+    {
+      "part": "II",
+      "section_num": "XVII",
+      "section": "Human-in-the-Loop Patterns",
+      "name": "Triage",
+      "description": "Human reviews a batch of flagged items and decides disposition for each — approve, reject, reassign, defer."
+    },
+    {
+      "part": "II",
+      "section_num": "XVII",
+      "section": "Human-in-the-Loop Patterns",
+      "name": "Teach",
+      "description": "Human corrects an agent's mistake AND updates the persistent instructions (CLAUDE.md, skill file) so it doesn't recur."
+    },
+    {
+      "part": "II",
+      "section_num": "XVII",
+      "section": "Human-in-the-Loop Patterns",
+      "name": "Delegate Back",
+      "description": "Human returns a task to the agent with additional context or constraints after reviewing it — \"try again, but consider X.\""
+    },
+    {
+      "part": "II",
+      "section_num": "XVIII",
+      "section": "SDLC Commands",
+      "subsection": "A. Requirements & Design",
+      "name": "Elicit",
+      "description": "Gather requirements from stakeholders, tickets, or existing systems. Ingest ServiceNow RITMs, Jira issues, Slack threads, or user interviews into structured requirements."
+    },
+    {
+      "part": "II",
+      "section_num": "XVIII",
+      "section": "SDLC Commands",
+      "subsection": "A. Requirements & Design",
+      "name": "Acceptance Criteria",
+      "description": "Formalize pass/fail conditions — Given/When/Then, input/output pairs, or constraint lists. The contract between \"what we want\" and \"how we know it's done.\""
+    },
+    {
+      "part": "II",
+      "section_num": "XVIII",
+      "section": "SDLC Commands",
+      "subsection": "A. Requirements & Design",
+      "name": "Spike",
+      "description": "Time-boxed exploration to reduce uncertainty before committing to an approach. \"Can we even connect to this API? What does the response look like?\""
+    },
+    {
+      "part": "II",
+      "section_num": "XVIII",
+      "section": "SDLC Commands",
+      "subsection": "A. Requirements & Design",
+      "name": "ADR",
+      "description": "Architecture Decision Record — capture the *why* behind a design choice so future agents and humans don't unknowingly undo it. Immutable once written."
+    },
+    {
+      "part": "II",
+      "section_num": "XVIII",
+      "section": "SDLC Commands",
+      "subsection": "A. Requirements & Design",
+      "name": "Threat Model",
+      "description": "Identify attack surfaces, trust boundaries, and security risks before implementation — not after. STRIDE, DREAD, or lightweight asset-based approaches."
+    },
+    {
+      "part": "II",
+      "section_num": "XVIII",
+      "section": "SDLC Commands",
+      "subsection": "A. Requirements & Design",
+      "name": "RFC",
+      "description": "Request for Comments — propose a significant change with context, alternatives considered, and trade-offs. Agents or humans review and approve before work begins."
+    },
+    {
+      "part": "II",
+      "section_num": "XVIII",
+      "section": "SDLC Commands",
+      "subsection": "B. Implementation & Build",
+      "name": "Scaffold",
+      "description": "Generate project or module boilerplate — directory structure, configs, base classes, CI templates. The skeleton before the meat."
+    },
+    {
+      "part": "II",
+      "section_num": "XVIII",
+      "section": "SDLC Commands",
+      "subsection": "B. Implementation & Build",
+      "name": "Implement",
+      "description": "Write the production code. The core build step — one task, one component, one deliverable."
+    },
+    {
+      "part": "II",
+      "section_num": "XVIII",
+      "section": "SDLC Commands",
+      "subsection": "B. Implementation & Build",
+      "name": "Wire",
+      "description": "Connect components together — API integrations, dependency injection, config binding, import graphs. Distinct from Implement (which builds individual pieces)."
+    },
+    {
+      "part": "II",
+      "section_num": "XVIII",
+      "section": "SDLC Commands",
+      "subsection": "B. Implementation & Build",
+      "name": "Mock",
+      "description": "Create fake endpoints, services, or data for development and testing before real dependencies are available. Stubs, fixtures, contract-based mocks."
+    },
+    {
+      "part": "II",
+      "section_num": "XVIII",
+      "section": "SDLC Commands",
+      "subsection": "B. Implementation & Build",
+      "name": "Migrate",
+      "description": "Schema changes, data transformations, version upgrades. Distinct from Implement because migrations have rollback requirements and must be idempotent."
+    },
+    {
+      "part": "II",
+      "section_num": "XVIII",
+      "section": "SDLC Commands",
+      "subsection": "B. Implementation & Build",
+      "name": "Generate",
+      "description": "Auto-produce derived artifacts from a source of truth — TypeScript types from a schema, API clients from OpenAPI specs, IIQ connectors from config templates."
+    },
+    {
+      "part": "II",
+      "section_num": "XVIII",
+      "section": "SDLC Commands",
+      "subsection": "C. Testing",
+      "name": "Unit Test",
+      "description": "Test individual functions or classes in isolation. Fast, focused, deterministic. The foundation of the test pyramid."
+    },
+    {
+      "part": "II",
+      "section_num": "XVIII",
+      "section": "SDLC Commands",
+      "subsection": "C. Testing",
+      "name": "Integration Test",
+      "description": "Test components working together — APIs calling databases, services calling services, connectors talking to endpoints."
+    },
+    {
+      "part": "II",
+      "section_num": "XVIII",
+      "section": "SDLC Commands",
+      "subsection": "C. Testing",
+      "name": "E2E Test",
+      "description": "Full workflow simulation from user input to final output. Slowest, most brittle, but highest confidence."
+    },
+    {
+      "part": "II",
+      "section_num": "XVIII",
+      "section": "SDLC Commands",
+      "subsection": "C. Testing",
+      "name": "Regression Test",
+      "description": "Verify that new changes didn't break existing functionality. Run the existing suite against the new code."
+    },
+    {
+      "part": "II",
+      "section_num": "XVIII",
+      "section": "SDLC Commands",
+      "subsection": "C. Testing",
+      "name": "Load Test",
+      "description": "Verify behavior under scale — concurrent users, large datasets, sustained throughput. JMeter, k6, Locust."
+    },
+    {
+      "part": "II",
+      "section_num": "XVIII",
+      "section": "SDLC Commands",
+      "subsection": "C. Testing",
+      "name": "Fuzz",
+      "description": "Throw random or malformed inputs at the system to find crashes, panics, and unhandled edge cases."
+    },
+    {
+      "part": "II",
+      "section_num": "XVIII",
+      "section": "SDLC Commands",
+      "subsection": "C. Testing",
+      "name": "Smoke Test",
+      "description": "Quick sanity check that the basic happy path works before running the full suite. First gate after deployment."
+    },
+    {
+      "part": "II",
+      "section_num": "XVIII",
+      "section": "SDLC Commands",
+      "subsection": "C. Testing",
+      "name": "Contract Test",
+      "description": "Verify that two services agree on their shared interface — request/response shapes, error codes, auth headers — without running both together."
+    },
+    {
+      "part": "II",
+      "section_num": "XVIII",
+      "section": "SDLC Commands",
+      "subsection": "D. Release & Deploy",
+      "name": "Version",
+      "description": "Tag a release with semantic versioning (major.minor.patch). Communicates the nature of changes to consumers."
+    },
+    {
+      "part": "II",
+      "section_num": "XVIII",
+      "section": "SDLC Commands",
+      "subsection": "D. Release & Deploy",
+      "name": "Package",
+      "description": "Bundle artifacts for deployment — Docker images, binaries, archives, Helm charts, IIQ deployment packages."
+    },
+    {
+      "part": "II",
+      "section_num": "XVIII",
+      "section": "SDLC Commands",
+      "subsection": "D. Release & Deploy",
+      "name": "Stage",
+      "description": "Deploy to a pre-production environment for final validation. Mirror of production with synthetic or sanitized data."
+    },
+    {
+      "part": "II",
+      "section_num": "XVIII",
+      "section": "SDLC Commands",
+      "subsection": "D. Release & Deploy",
+      "name": "Deploy",
+      "description": "Push to production. Blue-green, rolling, or canary strategy depending on risk tolerance."
+    },
+    {
+      "part": "II",
+      "section_num": "XVIII",
+      "section": "SDLC Commands",
+      "subsection": "D. Release & Deploy",
+      "name": "Rollback",
+      "description": "Revert a bad deployment to the previous known-good state. Distinct from Compensate (broader) — Rollback specifically targets deployment artifacts."
+    },
+    {
+      "part": "II",
+      "section_num": "XVIII",
+      "section": "SDLC Commands",
+      "subsection": "D. Release & Deploy",
+      "name": "Feature Flag",
+      "description": "Toggle new functionality on/off without redeploying. Decouple deployment from release — ship dark, enable when ready."
+    },
+    {
+      "part": "II",
+      "section_num": "XVIII",
+      "section": "SDLC Commands",
+      "subsection": "D. Release & Deploy",
+      "name": "Canary Deploy",
+      "description": "Route a percentage of traffic to the new version before full rollout. Catch production-only issues with limited blast radius."
+    },
+    {
+      "part": "II",
+      "section_num": "XVIII",
+      "section": "SDLC Commands",
+      "subsection": "D. Release & Deploy",
+      "name": "Promote",
+      "description": "Move an artifact from one environment to the next — dev → staging → production. Same artifact, different config."
+    },
+    {
+      "part": "II",
+      "section_num": "XVIII",
+      "section": "SDLC Commands",
+      "subsection": "E. Operate & Maintain",
+      "name": "Monitor",
+      "description": "Ongoing health checks, alerting, SLA tracking. Detect drift from expected behavior before users report it."
+    },
+    {
+      "part": "II",
+      "section_num": "XVIII",
+      "section": "SDLC Commands",
+      "subsection": "E. Operate & Maintain",
+      "name": "Incident",
+      "description": "Detect, classify, and respond to production issues. Severity levels, runbooks, escalation paths, blameless post-mortems."
+    },
+    {
+      "part": "II",
+      "section_num": "XVIII",
+      "section": "SDLC Commands",
+      "subsection": "E. Operate & Maintain",
+      "name": "Hotfix",
+      "description": "Emergency patch applied outside the normal release cycle. Bypasses staging for speed, but must be backported to the main branch."
+    },
+    {
+      "part": "II",
+      "section_num": "XVIII",
+      "section": "SDLC Commands",
+      "subsection": "E. Operate & Maintain",
+      "name": "Deprecate",
+      "description": "Mark functionality for removal with a migration path and timeline. Consumers get warnings before it disappears."
+    },
+    {
+      "part": "II",
+      "section_num": "XVIII",
+      "section": "SDLC Commands",
+      "subsection": "E. Operate & Maintain",
+      "name": "Decommission",
+      "description": "Safely shut down a service, integration, or infrastructure. Cleanup DNS, secrets, access, monitoring, documentation. The inverse of Scaffold."
+    },
+    {
+      "part": "II",
+      "section_num": "XVIII",
+      "section": "SDLC Commands",
+      "subsection": "E. Operate & Maintain",
+      "name": "Patch",
+      "description": "Apply targeted security or dependency updates. Smaller than a release, more structured than a hotfix. Often automated via Dependabot or Renovate."
+    },
+    {
+      "part": "II",
+      "section_num": "XVIII",
+      "section": "SDLC Commands",
+      "subsection": "F. Documentation & Knowledge",
+      "name": "Document",
+      "description": "Generate or update technical docs — API specs, runbooks, architecture diagrams, config references. Living docs, not afterthoughts."
+    },
+    {
+      "part": "II",
+      "section_num": "XVIII",
+      "section": "SDLC Commands",
+      "subsection": "F. Documentation & Knowledge",
+      "name": "Changelog",
+      "description": "Maintain a human-readable record of what changed and why per release. Audience: consumers of the system, not the builders."
+    },
+    {
+      "part": "II",
+      "section_num": "XVIII",
+      "section": "SDLC Commands",
+      "subsection": "F. Documentation & Knowledge",
+      "name": "Onboard",
+      "description": "Produce context that lets a new agent or human pick up the project — the \"getting started\" package. README, setup guide, key decisions, known gotchas."
+    },
+    {
+      "part": "II",
+      "section_num": "XVIII",
+      "section": "SDLC Commands",
+      "subsection": "F. Documentation & Knowledge",
+      "name": "Runbook",
+      "description": "Step-by-step procedure for a specific operational scenario — \"how to rotate the EPIC_EPCS CyberArk credential\" or \"how to restart the IIQ provisioning service.\""
+    },
+    {
+      "part": "II",
+      "section_num": "XVIII",
+      "section": "SDLC Commands",
+      "subsection": "F. Documentation & Knowledge",
+      "name": "Postmortem",
+      "description": "Structured analysis of an incident — timeline, root cause, contributing factors, action items. Blameless, focused on systemic improvement."
+    },
+    {
+      "part": "II",
+      "section_num": "XIX",
+      "section": "Infrastructure & Security Operations",
+      "subsection": "A. Identity & Access Management",
+      "name": "Provision",
+      "description": "Create an identity, account, or entitlement in a target system — IIQ pushing to Epic, Entra ID app registrations, SCIM user creation."
+    },
+    {
+      "part": "II",
+      "section_num": "XIX",
+      "section": "Infrastructure & Security Operations",
+      "subsection": "A. Identity & Access Management",
+      "name": "Deprovision",
+      "description": "Remove access — the inverse of Provision, with full audit trail and confirmation that access is actually gone."
+    },
+    {
+      "part": "II",
+      "section_num": "XIX",
+      "section": "Infrastructure & Security Operations",
+      "subsection": "A. Identity & Access Management",
+      "name": "Entitle",
+      "description": "Grant a specific permission or role. Finer-grained than Provision (which creates the account) — Entitle adds capabilities to an existing identity."
+    },
+    {
+      "part": "II",
+      "section_num": "XIX",
+      "section": "Infrastructure & Security Operations",
+      "subsection": "A. Identity & Access Management",
+      "name": "Revoke",
+      "description": "Remove a specific entitlement without deprovisioning the entire account. Surgical access removal."
+    },
+    {
+      "part": "II",
+      "section_num": "XIX",
+      "section": "Infrastructure & Security Operations",
+      "subsection": "A. Identity & Access Management",
+      "name": "Certify",
+      "description": "Periodic access review — manager confirms \"yes, this person still needs this access.\" Catch entitlement creep."
+    },
+    {
+      "part": "II",
+      "section_num": "XIX",
+      "section": "Infrastructure & Security Operations",
+      "subsection": "A. Identity & Access Management",
+      "name": "Recertify",
+      "description": "Re-run certification after a change event — role change, org transfer, risk flag, or time-based trigger."
+    },
+    {
+      "part": "II",
+      "section_num": "XIX",
+      "section": "Infrastructure & Security Operations",
+      "subsection": "A. Identity & Access Management",
+      "name": "Joiner-Mover-Leaver",
+      "description": "The lifecycle trigger — detect an HR event and fire the appropriate provision/modify/deprovision workflow automatically."
+    },
+    {
+      "part": "II",
+      "section_num": "XIX",
+      "section": "Infrastructure & Security Operations",
+      "subsection": "A. Identity & Access Management",
+      "name": "Correlate",
+      "description": "Match an identity across systems — \"is jsmith in AD the same person as j.smith in Epic?\" Identity resolution across disparate sources."
+    },
+    {
+      "part": "II",
+      "section_num": "XIX",
+      "section": "Infrastructure & Security Operations",
+      "subsection": "A. Identity & Access Management",
+      "name": "Reconcile Identity",
+      "description": "Detect drift between the authoritative source and target systems — orphaned accounts, entitlements that don't match policy, stale access."
+    },
+    {
+      "part": "II",
+      "section_num": "XIX",
+      "section": "Infrastructure & Security Operations",
+      "subsection": "A. Identity & Access Management",
+      "name": "Aggregate",
+      "description": "Pull current account and entitlement data from a target system into the identity governance platform. The read before the reconcile."
+    },
+    {
+      "part": "II",
+      "section_num": "XIX",
+      "section": "Infrastructure & Security Operations",
+      "subsection": "A. Identity & Access Management",
+      "name": "Role Mine",
+      "description": "Analyze existing entitlements to discover natural role clusters. Bottom-up role engineering from real access patterns."
+    },
+    {
+      "part": "II",
+      "section_num": "XIX",
+      "section": "Infrastructure & Security Operations",
+      "subsection": "B. Secrets & Credential Management",
+      "name": "Vault",
+      "description": "Store a secret in a centralized secrets manager (CyberArk, HashiCorp Vault, Azure Key Vault) with access controls and audit logging."
+    },
+    {
+      "part": "II",
+      "section_num": "XIX",
+      "section": "Infrastructure & Security Operations",
+      "subsection": "B. Secrets & Credential Management",
+      "name": "Checkout",
+      "description": "Retrieve a credential for time-limited use. CyberArk PSM pattern — credential is locked to the session and returned on completion."
+    },
+    {
+      "part": "II",
+      "section_num": "XIX",
+      "section": "Infrastructure & Security Operations",
+      "subsection": "B. Secrets & Credential Management",
+      "name": "Rotate",
+      "description": "Scheduled credential rotation with zero-downtime swap — update the secret in the vault and all consumers without service interruption."
+    },
+    {
+      "part": "II",
+      "section_num": "XIX",
+      "section": "Infrastructure & Security Operations",
+      "subsection": "B. Secrets & Credential Management",
+      "name": "Inject Secret",
+      "description": "Deliver a credential to a runtime without exposing it in config files or env vars — sidecar, init container, or API fetch at startup."
+    },
+    {
+      "part": "II",
+      "section_num": "XIX",
+      "section": "Infrastructure & Security Operations",
+      "subsection": "B. Secrets & Credential Management",
+      "name": "Break Glass",
+      "description": "Emergency access to a privileged credential outside normal workflow. Audited, alerted, time-limited, requires justification."
+    },
+    {
+      "part": "II",
+      "section_num": "XIX",
+      "section": "Infrastructure & Security Operations",
+      "subsection": "B. Secrets & Credential Management",
+      "name": "Seal",
+      "description": "Mark a secret as compromised or expired and ensure all cached copies are purged — revoke, rotate, and verify in one operation."
+    },
+    {
+      "part": "II",
+      "section_num": "XIX",
+      "section": "Infrastructure & Security Operations",
+      "subsection": "B. Secrets & Credential Management",
+      "name": "Escrow",
+      "description": "Store a recovery key or credential with a trusted third party for disaster recovery — distinct from Vault (operational) vs Escrow (break-the-glass recovery)."
+    },
+    {
+      "part": "II",
+      "section_num": "XIX",
+      "section": "Infrastructure & Security Operations",
+      "subsection": "C. Directory & Authentication Operations",
+      "name": "Bind",
+      "description": "Establish an authenticated connection to a directory — LDAP bind, Kerberos TGT request, OIDC token exchange. The handshake before any query."
+    },
+    {
+      "part": "II",
+      "section_num": "XIX",
+      "section": "Infrastructure & Security Operations",
+      "subsection": "C. Directory & Authentication Operations",
+      "name": "Query",
+      "description": "Search the directory for objects matching criteria — LDAP filters, IIQ Filter API, Graph API queries. The read operation."
+    },
+    {
+      "part": "II",
+      "section_num": "XIX",
+      "section": "Infrastructure & Security Operations",
+      "subsection": "C. Directory & Authentication Operations",
+      "name": "Enforce Policy",
+      "description": "Apply authentication or password policy to a scope — CyberArk auth policies, fine-grained password policies, conditional access rules."
+    },
+    {
+      "part": "II",
+      "section_num": "XIX",
+      "section": "Infrastructure & Security Operations",
+      "subsection": "C. Directory & Authentication Operations",
+      "name": "Sync",
+      "description": "Replicate identity data between systems — Azure Cross-Tenant Sync, AD Connect, SCIM provisioning cycles (~40-min cadence)."
+    },
+    {
+      "part": "II",
+      "section_num": "XIX",
+      "section": "Infrastructure & Security Operations",
+      "subsection": "C. Directory & Authentication Operations",
+      "name": "Delegate Admin",
+      "description": "Grant administrative permissions over a specific OU or scope — OU delegation in AD, administrative units in Entra ID."
+    },
+    {
+      "part": "II",
+      "section_num": "XIX",
+      "section": "Infrastructure & Security Operations",
+      "subsection": "C. Directory & Authentication Operations",
+      "name": "Nest / Flatten",
+      "description": "Manage group membership hierarchy — nested group resolution for systems that support it, flattening for those that don't (Azure CTS)."
+    },
+    {
+      "part": "II",
+      "section_num": "XIX",
+      "section": "Infrastructure & Security Operations",
+      "subsection": "C. Directory & Authentication Operations",
+      "name": "Claim",
+      "description": "Assert an identity attribute for consumption by a relying party — SAML assertion, OIDC claim, JWT claim mapping, token enrichment."
+    },
+    {
+      "part": "II",
+      "section_num": "XIX",
+      "section": "Infrastructure & Security Operations",
+      "subsection": "C. Directory & Authentication Operations",
+      "name": "Federate",
+      "description": "Establish trust between identity providers — SAML federation, OIDC trust, cross-domain B2B/B2C relationships."
+    },
+    {
+      "part": "II",
+      "section_num": "XIX",
+      "section": "Infrastructure & Security Operations",
+      "subsection": "C. Directory & Authentication Operations",
+      "name": "Step-Up Auth",
+      "description": "Require additional authentication factors when the risk level increases — MFA challenge on sensitive operations, adaptive auth."
+    },
+    {
+      "part": "II",
+      "section_num": "XIX",
+      "section": "Infrastructure & Security Operations",
+      "subsection": "D. Network & Infrastructure Security",
+      "name": "Segment",
+      "description": "Isolate network zones — microsegmentation, VLAN assignment, SDN rules, security groups. Limit lateral movement."
+    },
+    {
+      "part": "II",
+      "section_num": "XIX",
+      "section": "Infrastructure & Security Operations",
+      "subsection": "D. Network & Infrastructure Security",
+      "name": "Tunnel",
+      "description": "Establish encrypted connectivity — WireGuard, IPsec, Tailscale, SSH tunneling. Secure the transport layer."
+    },
+    {
+      "part": "II",
+      "section_num": "XIX",
+      "section": "Infrastructure & Security Operations",
+      "subsection": "D. Network & Infrastructure Security",
+      "name": "Attest Device",
+      "description": "Verify device health and posture before granting access — TPM attestation, MDM compliance, certificate validation, PCR verification."
+    },
+    {
+      "part": "II",
+      "section_num": "XIX",
+      "section": "Infrastructure & Security Operations",
+      "subsection": "D. Network & Infrastructure Security",
+      "name": "JIT Access",
+      "description": "Just-In-Time — grant access only when needed, revoke automatically after a time window or session end. Minimize standing privileges."
+    },
+    {
+      "part": "II",
+      "section_num": "XIX",
+      "section": "Infrastructure & Security Operations",
+      "subsection": "D. Network & Infrastructure Security",
+      "name": "Quarantine Host",
+      "description": "Isolate a compromised or non-compliant host from the network pending investigation. Infra-level variant of agent Quarantine (IX)."
+    },
+    {
+      "part": "II",
+      "section_num": "XIX",
+      "section": "Infrastructure & Security Operations",
+      "subsection": "D. Network & Infrastructure Security",
+      "name": "Baseline",
+      "description": "Establish the \"normal\" behavior profile for a system, user, or network segment. Deviations from baseline trigger alerts."
+    },
+    {
+      "part": "II",
+      "section_num": "XIX",
+      "section": "Infrastructure & Security Operations",
+      "subsection": "D. Network & Infrastructure Security",
+      "name": "Harden",
+      "description": "Apply security configuration to infrastructure — CIS benchmarks, STIG compliance, disable unnecessary services, enforce TLS versions."
+    },
+    {
+      "part": "II",
+      "section_num": "XIX",
+      "section": "Infrastructure & Security Operations",
+      "subsection": "D. Network & Infrastructure Security",
+      "name": "Zero Trust Evaluate",
+      "description": "Continuous policy evaluation — re-assess trust for every request based on identity, device, location, behavior, and risk score. Never implicit trust."
+    },
+    {
+      "part": "II",
+      "section_num": "XIX",
+      "section": "Infrastructure & Security Operations",
+      "subsection": "E. Compliance & Audit",
+      "name": "Collect Evidence",
+      "description": "Gather artifacts proving a control is operating — screenshots, logs, config exports, query results, attestation records."
+    },
+    {
+      "part": "II",
+      "section_num": "XIX",
+      "section": "Infrastructure & Security Operations",
+      "subsection": "E. Compliance & Audit",
+      "name": "Attest Control",
+      "description": "Formally certify that a security control is in place and functioning. Your AD OU restriction and password policy findings are exactly this."
+    },
+    {
+      "part": "II",
+      "section_num": "XIX",
+      "section": "Infrastructure & Security Operations",
+      "subsection": "E. Compliance & Audit",
+      "name": "Map Control",
+      "description": "Link a technical implementation to a compliance framework requirement — \"this GPO satisfies HIPAA §164.312(d).\" Traceability."
+    },
+    {
+      "part": "II",
+      "section_num": "XIX",
+      "section": "Infrastructure & Security Operations",
+      "subsection": "E. Compliance & Audit",
+      "name": "Gap Analysis",
+      "description": "Compare current state against a target framework and identify what's missing. The delta between \"where we are\" and \"where we need to be.\""
+    },
+    {
+      "part": "II",
+      "section_num": "XIX",
+      "section": "Infrastructure & Security Operations",
+      "subsection": "E. Compliance & Audit",
+      "name": "Remediation Plan",
+      "description": "For each gap, define the fix, owner, timeline, and acceptance criteria. Your Given/When/Then AC patterns are textbook remediation plans."
+    },
+    {
+      "part": "II",
+      "section_num": "XIX",
+      "section": "Infrastructure & Security Operations",
+      "subsection": "E. Compliance & Audit",
+      "name": "Exception",
+      "description": "Formally document and approve a deviation from policy — compensating controls, expiration date, risk acceptance, and sign-off."
+    },
+    {
+      "part": "II",
+      "section_num": "XIX",
+      "section": "Infrastructure & Security Operations",
+      "subsection": "E. Compliance & Audit",
+      "name": "Continuous Compliance",
+      "description": "Automate evidence collection and control attestation on a schedule — not just point-in-time audits but ongoing verification."
+    },
+    {
+      "part": "II",
+      "section_num": "XIX",
+      "section": "Infrastructure & Security Operations",
+      "subsection": "F. Monitoring & Detection (SecOps)",
+      "name": "Ingest",
+      "description": "Collect logs, events, and telemetry from infrastructure into a SIEM or analysis platform. The raw data pipeline."
+    },
+    {
+      "part": "II",
+      "section_num": "XIX",
+      "section": "Infrastructure & Security Operations",
+      "subsection": "F. Monitoring & Detection (SecOps)",
+      "name": "Correlate Events",
+      "description": "Connect related signals across systems — failed login + VPN connection + file access = potential lateral movement."
+    },
+    {
+      "part": "II",
+      "section_num": "XIX",
+      "section": "Infrastructure & Security Operations",
+      "subsection": "F. Monitoring & Detection (SecOps)",
+      "name": "Triage Alert",
+      "description": "Evaluate an alert for severity, scope, and required response — true positive, false positive, or needs investigation."
+    },
+    {
+      "part": "II",
+      "section_num": "XIX",
+      "section": "Infrastructure & Security Operations",
+      "subsection": "F. Monitoring & Detection (SecOps)",
+      "name": "Contain",
+      "description": "Limit blast radius of an active threat — disable account, isolate host, block IP, revoke sessions, kill tokens."
+    },
+    {
+      "part": "II",
+      "section_num": "XIX",
+      "section": "Infrastructure & Security Operations",
+      "subsection": "F. Monitoring & Detection (SecOps)",
+      "name": "Eradicate",
+      "description": "Remove root cause of a security incident — patch vulnerability, remove malware, close unauthorized access path, rotate compromised creds."
+    },
+    {
+      "part": "II",
+      "section_num": "XIX",
+      "section": "Infrastructure & Security Operations",
+      "subsection": "F. Monitoring & Detection (SecOps)",
+      "name": "Recover",
+      "description": "Restore normal operations after an incident — re-enable accounts, restore from backup, validate integrity, resume monitoring."
+    },
+    {
+      "part": "II",
+      "section_num": "XIX",
+      "section": "Infrastructure & Security Operations",
+      "subsection": "F. Monitoring & Detection (SecOps)",
+      "name": "Hunt",
+      "description": "Proactive search for threats that haven't triggered alerts — hypothesis-driven investigation using logs, telemetry, and behavioral analysis."
+    },
+    {
+      "part": "II",
+      "section_num": "XX",
+      "section": "Document Writing & Composition",
+      "subsection": "A. Planning & Structure",
+      "name": "Outline",
+      "description": "Define the document's skeleton — sections, flow, argument structure — before writing any prose. The blueprint."
+    },
+    {
+      "part": "II",
+      "section_num": "XX",
+      "section": "Document Writing & Composition",
+      "subsection": "A. Planning & Structure",
+      "name": "Scope",
+      "description": "Explicitly state what the document covers and what it doesn't. Prevents scope creep mid-draft and sets reader expectations."
+    },
+    {
+      "part": "II",
+      "section_num": "XX",
+      "section": "Document Writing & Composition",
+      "subsection": "A. Planning & Structure",
+      "name": "Audience",
+      "description": "Identify who will read this and calibrate tone, depth, and assumed knowledge accordingly. An exec summary ≠ an engineering spec."
+    },
+    {
+      "part": "II",
+      "section_num": "XX",
+      "section": "Document Writing & Composition",
+      "subsection": "A. Planning & Structure",
+      "name": "Frame",
+      "description": "Choose the document's rhetorical structure — problem/solution, current-state/future-state, situation/complication/resolution, chronological, topical."
+    },
+    {
+      "part": "II",
+      "section_num": "XX",
+      "section": "Document Writing & Composition",
+      "subsection": "A. Planning & Structure",
+      "name": "Template",
+      "description": "Select or create a reusable document skeleton for a recurring deliverable type — finding reports, architecture proposals, user stories, runbooks."
+    },
+    {
+      "part": "II",
+      "section_num": "XX",
+      "section": "Document Writing & Composition",
+      "subsection": "B. Drafting & Composition",
+      "name": "Draft",
+      "description": "Write the first pass — get ideas down without polishing. Prioritize completeness over perfection."
+    },
+    {
+      "part": "II",
+      "section_num": "XX",
+      "section": "Document Writing & Composition",
+      "subsection": "B. Drafting & Composition",
+      "name": "Expand",
+      "description": "Take a bullet point, outline item, or stub and develop it into full prose with supporting detail."
+    },
+    {
+      "part": "II",
+      "section_num": "XX",
+      "section": "Document Writing & Composition",
+      "subsection": "B. Drafting & Composition",
+      "name": "Condense",
+      "description": "Compress verbose content into tighter prose without losing meaning. The inverse of Expand."
+    },
+    {
+      "part": "II",
+      "section_num": "XX",
+      "section": "Document Writing & Composition",
+      "subsection": "B. Drafting & Composition",
+      "name": "Translate Register",
+      "description": "Rewrite content for a different audience — technical to executive, internal to customer-facing, formal to conversational."
+    },
+    {
+      "part": "II",
+      "section_num": "XX",
+      "section": "Document Writing & Composition",
+      "subsection": "B. Drafting & Composition",
+      "name": "Cite",
+      "description": "Add references, sources, or evidence to support claims. Link assertions to authoritative sources."
+    },
+    {
+      "part": "II",
+      "section_num": "XX",
+      "section": "Document Writing & Composition",
+      "subsection": "B. Drafting & Composition",
+      "name": "Illustrate",
+      "description": "Add diagrams, tables, examples, or analogies that make abstract concepts concrete. Mermaid, sequence diagrams, architecture diagrams."
+    },
+    {
+      "part": "II",
+      "section_num": "XX",
+      "section": "Document Writing & Composition",
+      "subsection": "B. Drafting & Composition",
+      "name": "Cross-Reference",
+      "description": "Link related sections, documents, or external resources so the reader can navigate the knowledge graph."
+    },
+    {
+      "part": "II",
+      "section_num": "XX",
+      "section": "Document Writing & Composition",
+      "subsection": "C. Review & Refinement",
+      "name": "Proofread",
+      "description": "Check for grammar, spelling, punctuation, and typographical errors. Mechanical correctness."
+    },
+    {
+      "part": "II",
+      "section_num": "XX",
+      "section": "Document Writing & Composition",
+      "subsection": "C. Review & Refinement",
+      "name": "Edit",
+      "description": "Improve clarity, flow, and structure. Rewrite awkward sentences, eliminate redundancy, strengthen transitions."
+    },
+    {
+      "part": "II",
+      "section_num": "XX",
+      "section": "Document Writing & Composition",
+      "subsection": "C. Review & Refinement",
+      "name": "Peer Review",
+      "description": "Have another agent or human read for technical accuracy, logical gaps, and unstated assumptions."
+    },
+    {
+      "part": "II",
+      "section_num": "XX",
+      "section": "Document Writing & Composition",
+      "subsection": "C. Review & Refinement",
+      "name": "Red Team",
+      "description": "Deliberately try to poke holes in the document's argument, find missing edge cases, or identify claims without evidence."
+    },
+    {
+      "part": "II",
+      "section_num": "XX",
+      "section": "Document Writing & Composition",
+      "subsection": "C. Review & Refinement",
+      "name": "Harmonize",
+      "description": "Ensure consistent terminology, formatting, tone, and style across a multi-author or multi-section document."
+    },
+    {
+      "part": "II",
+      "section_num": "XX",
+      "section": "Document Writing & Composition",
+      "subsection": "C. Review & Refinement",
+      "name": "Version",
+      "description": "Tag a document revision with a version identifier and change summary. Maintain history without cluttering the current draft."
+    },
+    {
+      "part": "II",
+      "section_num": "XX",
+      "section": "Document Writing & Composition",
+      "subsection": "D. Delivery & Publishing",
+      "name": "Format",
+      "description": "Apply the target format — Markdown, DOCX, PDF, Confluence wiki, slide deck, email. Structure meets medium."
+    },
+    {
+      "part": "II",
+      "section_num": "XX",
+      "section": "Document Writing & Composition",
+      "subsection": "D. Delivery & Publishing",
+      "name": "Finalize",
+      "description": "Lock the document — no more edits. Mark as approved, add signatures or sign-offs if required."
+    },
+    {
+      "part": "II",
+      "section_num": "XX",
+      "section": "Document Writing & Composition",
+      "subsection": "D. Delivery & Publishing",
+      "name": "Distribute",
+      "description": "Deliver the document to its audience — email, wiki publish, SharePoint upload, Slack post, PR comment."
+    },
+    {
+      "part": "II",
+      "section_num": "XX",
+      "section": "Document Writing & Composition",
+      "subsection": "D. Delivery & Publishing",
+      "name": "Archive",
+      "description": "Move a superseded or completed document to long-term storage with metadata for future retrieval."
+    },
+    {
+      "part": "II",
+      "section_num": "XXI",
+      "section": "Architecture Disciplines",
+      "subsection": "A. Enterprise Architecture",
+      "name": "Capability Map",
+      "description": "Identify and organize what the organization does (not how) — business capabilities, technology capabilities, data capabilities. The \"what\" before the \"how.\""
+    },
+    {
+      "part": "II",
+      "section_num": "XXI",
+      "section": "Architecture Disciplines",
+      "subsection": "A. Enterprise Architecture",
+      "name": "Reference Architecture",
+      "description": "Define the canonical pattern for a domain — \"this is how we build API services\" or \"this is our identity architecture.\" Reusable, opinionated, versioned."
+    },
+    {
+      "part": "II",
+      "section_num": "XXI",
+      "section": "Architecture Disciplines",
+      "subsection": "A. Enterprise Architecture",
+      "name": "Technology Radar",
+      "description": "Evaluate and classify technologies as Adopt / Trial / Assess / Hold. Guides teams without mandating — \"we recommend X, we're evaluating Y, stop using Z.\""
+    },
+    {
+      "part": "II",
+      "section_num": "XXI",
+      "section": "Architecture Disciplines",
+      "subsection": "A. Enterprise Architecture",
+      "name": "Fitness Function",
+      "description": "Define automated checks that verify an architecture property is being maintained — \"all services must respond in <200ms\" or \"no direct database access from the UI layer.\""
+    },
+    {
+      "part": "II",
+      "section_num": "XXI",
+      "section": "Architecture Disciplines",
+      "subsection": "A. Enterprise Architecture",
+      "name": "Trade-off Analysis",
+      "description": "Explicitly document what you gain and what you lose with each architectural decision. No free lunches — make the trade-offs visible."
+    },
+    {
+      "part": "II",
+      "section_num": "XXI",
+      "section": "Architecture Disciplines",
+      "subsection": "A. Enterprise Architecture",
+      "name": "Current-State / Future-State",
+      "description": "Map where you are today and where you're going. The gap between them is the roadmap."
+    },
+    {
+      "part": "II",
+      "section_num": "XXI",
+      "section": "Architecture Disciplines",
+      "subsection": "A. Enterprise Architecture",
+      "name": "Domain Boundary",
+      "description": "Define where one domain ends and another begins — bounded contexts, service boundaries, team ownership lines."
+    },
+    {
+      "part": "II",
+      "section_num": "XXI",
+      "section": "Architecture Disciplines",
+      "subsection": "A. Enterprise Architecture",
+      "name": "Portfolio Rationalize",
+      "description": "Evaluate the existing technology portfolio and decide what to keep, consolidate, migrate, or retire."
+    },
+    {
+      "part": "II",
+      "section_num": "XXI",
+      "section": "Architecture Disciplines",
+      "subsection": "B. Identity & Access Architecture",
+      "name": "Trust Model",
+      "description": "Define who trusts whom, how trust is established, and what trust means in terms of access. The foundation of any identity architecture."
+    },
+    {
+      "part": "II",
+      "section_num": "XXI",
+      "section": "Architecture Disciplines",
+      "subsection": "B. Identity & Access Architecture",
+      "name": "Identity Fabric",
+      "description": "Design the topology of identity providers, directories, and federation relationships. How identity flows across the organization."
+    },
+    {
+      "part": "II",
+      "section_num": "XXI",
+      "section": "Architecture Disciplines",
+      "subsection": "B. Identity & Access Architecture",
+      "name": "Protocol Select",
+      "description": "Choose the right auth protocol for the context — SAML for legacy SSO, OIDC for modern apps, RADIUS for network, Kerberos for on-prem AD, FIDO2 for passwordless."
+    },
+    {
+      "part": "II",
+      "section_num": "XXI",
+      "section": "Architecture Disciplines",
+      "subsection": "B. Identity & Access Architecture",
+      "name": "Access Pattern Model",
+      "description": "Map how users, services, and devices actually access resources — request paths, auth flows, token lifecycles, session management."
+    },
+    {
+      "part": "II",
+      "section_num": "XXI",
+      "section": "Architecture Disciplines",
+      "subsection": "B. Identity & Access Architecture",
+      "name": "Entitlement Schema",
+      "description": "Design the structure of permissions — RBAC roles, ABAC attributes, policy hierarchies, inheritance rules, separation-of-duty constraints."
+    },
+    {
+      "part": "II",
+      "section_num": "XXI",
+      "section": "Architecture Disciplines",
+      "subsection": "B. Identity & Access Architecture",
+      "name": "Delegation Model",
+      "description": "Define how administrative authority is distributed — OU delegation, administrative units, tiered admin, privilege scoping."
+    },
+    {
+      "part": "II",
+      "section_num": "XXI",
+      "section": "Architecture Disciplines",
+      "subsection": "B. Identity & Access Architecture",
+      "name": "Identity Lifecycle",
+      "description": "Design the end-to-end journey from identity creation to decommission — joiner flows, mover workflows, leaver automation, dormant account handling."
+    },
+    {
+      "part": "II",
+      "section_num": "XXI",
+      "section": "Architecture Disciplines",
+      "subsection": "B. Identity & Access Architecture",
+      "name": "Authentication Assurance",
+      "description": "Define assurance levels (e.g., NIST AAL 1/2/3) and map them to authentication methods, step-up triggers, and risk thresholds."
+    },
+    {
+      "part": "II",
+      "section_num": "XXI",
+      "section": "Architecture Disciplines",
+      "subsection": "C. Governance & Policy Architecture",
+      "name": "Policy Hierarchy",
+      "description": "Define the structure of policies — enterprise policy → standard → procedure → guideline. Each level constrains the one below it."
+    },
+    {
+      "part": "II",
+      "section_num": "XXI",
+      "section": "Architecture Disciplines",
+      "subsection": "C. Governance & Policy Architecture",
+      "name": "Decision Rights",
+      "description": "Specify who can approve what — data classification owners, system owners, risk acceptors, exception approvers. RACI for governance."
+    },
+    {
+      "part": "II",
+      "section_num": "XXI",
+      "section": "Architecture Disciplines",
+      "subsection": "C. Governance & Policy Architecture",
+      "name": "Control Framework",
+      "description": "Select or build the control structure — NIST CSF, CIS Controls, ISO 27001, COBIT, or a custom hybrid. Map controls to risks."
+    },
+    {
+      "part": "II",
+      "section_num": "XXI",
+      "section": "Architecture Disciplines",
+      "subsection": "C. Governance & Policy Architecture",
+      "name": "Risk Taxonomy",
+      "description": "Categorize risks consistently — operational, compliance, financial, reputational, technical. Enables apples-to-apples comparison across domains."
+    },
+    {
+      "part": "II",
+      "section_num": "XXI",
+      "section": "Architecture Disciplines",
+      "subsection": "C. Governance & Policy Architecture",
+      "name": "Risk Register",
+      "description": "Maintain a living inventory of identified risks with likelihood, impact, owner, and treatment plan. The central governance artifact."
+    },
+    {
+      "part": "II",
+      "section_num": "XXI",
+      "section": "Architecture Disciplines",
+      "subsection": "C. Governance & Policy Architecture",
+      "name": "Separation of Duties",
+      "description": "Design constraints that prevent any single identity from having conflicting privileges — approve-and-execute, create-and-review."
+    },
+    {
+      "part": "II",
+      "section_num": "XXI",
+      "section": "Architecture Disciplines",
+      "subsection": "C. Governance & Policy Architecture",
+      "name": "Policy-as-Code",
+      "description": "Express governance rules in executable form — OPA/Rego, Sentinel, Cedar, AWS SCPs. Shift from document-based to enforceable policy."
+    },
+    {
+      "part": "II",
+      "section_num": "XXI",
+      "section": "Architecture Disciplines",
+      "subsection": "D. Network Architecture",
+      "name": "Topology Design",
+      "description": "Define the physical and logical layout of the network — hub-and-spoke, mesh, segmented zones, overlay networks."
+    },
+    {
+      "part": "II",
+      "section_num": "XXI",
+      "section": "Architecture Disciplines",
+      "subsection": "D. Network Architecture",
+      "name": "Zone Model",
+      "description": "Classify network segments by trust level and data sensitivity — DMZ, internal, restricted, management, guest. Traffic rules follow zone boundaries."
+    },
+    {
+      "part": "II",
+      "section_num": "XXI",
+      "section": "Architecture Disciplines",
+      "subsection": "D. Network Architecture",
+      "name": "Traffic Flow Model",
+      "description": "Map how data actually moves — north-south (in/out), east-west (lateral), service-to-service, user-to-service. Identifies chokepoints and exposure."
+    },
+    {
+      "part": "II",
+      "section_num": "XXI",
+      "section": "Architecture Disciplines",
+      "subsection": "D. Network Architecture",
+      "name": "Connectivity Architecture",
+      "description": "Design how sites, clouds, and partners connect — SD-WAN, MPLS, VPN tunnels, peering, direct connect. The physical underlay."
+    },
+    {
+      "part": "II",
+      "section_num": "XXI",
+      "section": "Architecture Disciplines",
+      "subsection": "D. Network Architecture",
+      "name": "Service Mesh",
+      "description": "Define the communication layer between services — sidecar proxies, mTLS, traffic management, observability, retry/circuit-break at the network level."
+    },
+    {
+      "part": "II",
+      "section_num": "XXI",
+      "section": "Architecture Disciplines",
+      "subsection": "D. Network Architecture",
+      "name": "DNS Architecture",
+      "description": "Design name resolution — split-horizon, conditional forwarding, private zones, service discovery. The invisible plumbing everything depends on."
+    },
+    {
+      "part": "II",
+      "section_num": "XXI",
+      "section": "Architecture Disciplines",
+      "subsection": "D. Network Architecture",
+      "name": "Certificate Architecture",
+      "description": "Design the PKI hierarchy — root CA, intermediate CAs, certificate lifecycle, auto-renewal, pinning strategy. Trust anchors for the entire infrastructure."
+    },
+    {
+      "part": "II",
+      "section_num": "XXI",
+      "section": "Architecture Disciplines",
+      "subsection": "E. Container & Platform Architecture",
+      "name": "Platform Blueprint",
+      "description": "Define the target developer platform — orchestrator (K8s), runtime, CI/CD, observability, secrets, networking. The \"golden path\" for teams."
+    },
+    {
+      "part": "II",
+      "section_num": "XXI",
+      "section": "Architecture Disciplines",
+      "subsection": "E. Container & Platform Architecture",
+      "name": "Workload Pattern",
+      "description": "Classify workloads by their operational characteristics — stateless web, stateful database, batch job, event-driven, long-running daemon. Pattern determines topology."
+    },
+    {
+      "part": "II",
+      "section_num": "XXI",
+      "section": "Architecture Disciplines",
+      "subsection": "E. Container & Platform Architecture",
+      "name": "Orchestrate",
+      "description": "Design how containers are scheduled, scaled, health-checked, and replaced — K8s deployments, StatefulSets, DaemonSets, Jobs, CronJobs."
+    },
+    {
+      "part": "II",
+      "section_num": "XXI",
+      "section": "Architecture Disciplines",
+      "subsection": "E. Container & Platform Architecture",
+      "name": "Image Pipeline",
+      "description": "Design the container image lifecycle — base image curation, build, scan, sign, promote, deploy. Supply chain security for containers."
+    },
+    {
+      "part": "II",
+      "section_num": "XXI",
+      "section": "Architecture Disciplines",
+      "subsection": "E. Container & Platform Architecture",
+      "name": "Infrastructure-as-Code",
+      "description": "Define infrastructure declaratively — Terraform/HCL, Pulumi, CloudFormation, Crossplane. Version-controlled, reviewable, reproducible."
+    },
+    {
+      "part": "II",
+      "section_num": "XXI",
+      "section": "Architecture Disciplines",
+      "subsection": "E. Container & Platform Architecture",
+      "name": "Sidecar / Init Pattern",
+      "description": "Design helper containers that augment the main workload — secret injection, log forwarding, proxy, certificate refresh."
+    },
+    {
+      "part": "II",
+      "section_num": "XXI",
+      "section": "Architecture Disciplines",
+      "subsection": "E. Container & Platform Architecture",
+      "name": "Namespace Strategy",
+      "description": "Define how K8s namespaces map to teams, environments, or applications. Isolation, resource quotas, RBAC scoping."
+    },
+    {
+      "part": "II",
+      "section_num": "XXI",
+      "section": "Architecture Disciplines",
+      "subsection": "E. Container & Platform Architecture",
+      "name": "GitOps",
+      "description": "Use Git as the single source of truth for infrastructure and application state. Pull-based reconciliation — ArgoCD, Flux."
     }
   ]
 }
