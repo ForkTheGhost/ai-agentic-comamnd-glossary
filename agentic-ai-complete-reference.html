@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agentic AI — Complete Command Reference</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0c0e13;
+    --surface: #14171e;
+    --surface-hover: #1a1e28;
+    --border: #252a36;
+    --border-bright: #3a4155;
+    --text: #e2e4ea;
+    --text-dim: #8891a5;
+    --accent: #c78fff;
+    --accent-dim: rgba(199,143,255,0.12);
+    --green: #5ceba0;
+    --green-dim: rgba(92,235,160,0.1);
+    --blue: #6cb4ff;
+    --blue-dim: rgba(108,180,255,0.1);
+    --orange: #ffaa5c;
+    --orange-dim: rgba(255,170,92,0.1);
+    --red: #ff6b7a;
+    --red-dim: rgba(255,107,122,0.1);
+    --cyan: #5ce8e8;
+    --cyan-dim: rgba(92,232,232,0.1);
+    --yellow: #ffe066;
+    --yellow-dim: rgba(255,224,102,0.1);
+    --pink: #ff7eb3;
+    --pink-dim: rgba(255,126,179,0.1);
+    --teal: #4dd4ac;
+    --teal-dim: rgba(77,212,172,0.1);
+    --indigo: #a78bfa;
+    --indigo-dim: rgba(167,139,250,0.1);
+    --lime: #b8e663;
+    --lime-dim: rgba(184,230,99,0.1);
+    --rose: #fb7185;
+    --rose-dim: rgba(251,113,133,0.1);
+    --sky: #38bdf8;
+    --sky-dim: rgba(56,189,248,0.1);
+    --amber: #fbbf24;
+    --amber-dim: rgba(251,191,36,0.1);
+    --fuchsia: #d946ef;
+    --fuchsia-dim: rgba(217,70,239,0.1);
+    --mono: 'JetBrains Mono', monospace;
+    --sans: 'DM Sans', system-ui, sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    line-height: 1.6;
+    padding: 2rem 1.5rem;
+  }
+
+  .container { max-width: 1200px; margin: 0 auto; }
+
+  header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  header h1 {
+    font-family: var(--mono);
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    background: linear-gradient(135deg, var(--accent), var(--blue));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 0.5rem;
+  }
+
+  header p {
+    color: var(--text-dim);
+    font-size: 0.95rem;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  .part-divider {
+    margin: 2.5rem 0 1.5rem;
+    padding: 1rem 1.25rem;
+    border-radius: 8px;
+    border: 1px solid var(--border-bright);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .part-divider-i { background: linear-gradient(135deg, rgba(199,143,255,0.06), rgba(108,180,255,0.06)); }
+  .part-divider-ii { background: linear-gradient(135deg, rgba(92,232,232,0.06), rgba(92,235,160,0.06)); }
+
+  .part-label {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 0.2rem 0.6rem;
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+
+  .part-label-i { background: var(--accent-dim); color: var(--accent); }
+  .part-label-ii { background: var(--cyan-dim); color: var(--cyan); }
+
+  .part-title { font-family: var(--mono); font-size: 1rem; font-weight: 700; }
+  .part-desc { color: var(--text-dim); font-size: 0.82rem; margin-left: auto; }
+
+  .filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    justify-content: center;
+    margin-bottom: 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: var(--bg);
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .filter-group { display: flex; flex-wrap: wrap; gap: 0.35rem; align-items: center; }
+  .filter-sep { width: 1px; height: 20px; background: var(--border-bright); margin: 0 0.3rem; }
+
+  .filter-btn {
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    font-weight: 600;
+    padding: 0.35rem 0.7rem;
+    border-radius: 5px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text-dim);
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .filter-btn:hover { border-color: var(--accent); color: var(--text); }
+  .filter-btn.active { background: var(--accent-dim); border-color: var(--accent); color: var(--accent); }
+  .filter-btn.part-ii-btn.active { background: var(--cyan-dim); border-color: var(--cyan); color: var(--cyan); }
+  .filter-btn.part-ii-btn:hover { border-color: var(--cyan); }
+
+  .section { margin-bottom: 2rem; animation: fadeIn 0.3s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-icon {
+    width: 30px; height: 30px;
+    border-radius: 7px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.95rem; flex-shrink: 0;
+  }
+
+  .section-title { font-family: var(--mono); font-size: 0.95rem; font-weight: 700; letter-spacing: -0.02em; }
+  .section-num { font-family: var(--mono); font-size: 0.65rem; font-weight: 700; color: var(--text-dim); opacity: 0.6; margin-right: -0.25rem; }
+  .section-subtitle { font-size: 0.78rem; color: var(--text-dim); margin-left: auto; font-family: var(--mono); }
+
+  .cmd-grid { display: flex; flex-direction: column; gap: 1px; }
+  .cmd-row {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 1.25rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 5px;
+    transition: background 0.15s;
+  }
+  .cmd-row:hover { background: var(--surface-hover); }
+  .cmd-name { font-family: var(--mono); font-size: 0.8rem; font-weight: 600; white-space: nowrap; }
+  .cmd-desc { font-size: 0.82rem; color: var(--text-dim); line-height: 1.5; }
+  .cmd-desc code {
+    font-family: var(--mono); font-size: 0.75rem;
+    background: var(--surface); padding: 0.1em 0.35em;
+    border-radius: 3px; border: 1px solid var(--border); color: var(--text);
+  }
+
+  /* Part I colors */
+  .s-session .section-icon { background: var(--accent-dim); color: var(--accent); }
+  .s-session .cmd-name { color: var(--accent); }
+  .s-context .section-icon { background: var(--blue-dim); color: var(--blue); }
+  .s-context .cmd-name { color: var(--blue); }
+  .s-model .section-icon { background: var(--green-dim); color: var(--green); }
+  .s-model .cmd-name { color: var(--green); }
+  .s-config .section-icon { background: var(--orange-dim); color: var(--orange); }
+  .s-config .cmd-name { color: var(--orange); }
+  .s-extensions .section-icon { background: var(--cyan-dim); color: var(--cyan); }
+  .s-extensions .cmd-name { color: var(--cyan); }
+  .s-skills .section-icon { background: var(--pink-dim); color: var(--pink); }
+  .s-skills .cmd-name { color: var(--pink); }
+  .s-p1agents .section-icon { background: var(--indigo-dim); color: var(--indigo); }
+  .s-p1agents .cmd-name { color: var(--indigo); }
+  .s-cli .section-icon { background: var(--yellow-dim); color: var(--yellow); }
+  .s-cli .cmd-name { color: var(--yellow); }
+  .s-shortcuts .section-icon { background: var(--red-dim); color: var(--red); }
+  .s-shortcuts .cmd-name { color: var(--red); }
+  .s-custom .section-icon { background: var(--teal-dim); color: var(--teal); }
+  .s-custom .cmd-name { color: var(--teal); }
+
+  /* Part II colors */
+  .s-orchestration .section-icon { background: var(--cyan-dim); color: var(--cyan); }
+  .s-orchestration .cmd-name { color: var(--cyan); }
+  .s-cognitive .section-icon { background: var(--indigo-dim); color: var(--indigo); }
+  .s-cognitive .cmd-name { color: var(--indigo); }
+  .s-qa .section-icon { background: var(--rose-dim); color: var(--rose); }
+  .s-qa .cmd-name { color: var(--rose); }
+  .s-memory .section-icon { background: var(--amber-dim); color: var(--amber); }
+  .s-memory .cmd-name { color: var(--amber); }
+  .s-toolenv .section-icon { background: var(--green-dim); color: var(--green); }
+  .s-toolenv .cmd-name { color: var(--green); }
+  .s-guardrails .section-icon { background: var(--red-dim); color: var(--red); }
+  .s-guardrails .cmd-name { color: var(--red); }
+  .s-output .section-icon { background: var(--sky-dim); color: var(--sky); }
+  .s-output .cmd-name { color: var(--sky); }
+  .s-collaboration .section-icon { background: var(--fuchsia-dim); color: var(--fuchsia); }
+  .s-collaboration .cmd-name { color: var(--fuchsia); }
+
+  .tip {
+    margin-top: 0.6rem; padding: 0.55rem 0.85rem;
+    border-radius: 5px; font-size: 0.78rem; line-height: 1.55; border-left: 3px solid;
+  }
+  .tip code {
+    font-family: var(--mono); font-size: 0.75rem;
+    background: rgba(255,255,255,0.06); padding: 0.1em 0.3em; border-radius: 3px;
+  }
+  .tip-accent { background: var(--accent-dim); border-color: var(--accent); }
+  .tip-green { background: var(--green-dim); border-color: var(--green); }
+  .tip-orange { background: var(--orange-dim); border-color: var(--orange); }
+  .tip-cyan { background: var(--cyan-dim); border-color: var(--cyan); }
+  .tip-red { background: var(--red-dim); border-color: var(--red); }
+  .tip-indigo { background: var(--indigo-dim); border-color: var(--indigo); }
+  .tip-sky { background: var(--sky-dim); border-color: var(--sky); }
+  .tip-fuchsia { background: var(--fuchsia-dim); border-color: var(--fuchsia); }
+  .tip-amber { background: var(--amber-dim); border-color: var(--amber); }
+
+  @media (max-width: 700px) {
+    .cmd-row { grid-template-columns: 1fr; gap: 0.15rem; }
+    .section-subtitle, .part-desc { display: none; }
+    header h1 { font-size: 1.4rem; }
+    .filter-bar { gap: 0.3rem; }
+    .filter-btn { font-size: 0.62rem; padding: 0.25rem 0.5rem; }
+    .filter-sep { display: none; }
+  }
+
+  @media print {
+    body { background: #fff; color: #111; padding: 0.5cm; font-size: 11px; }
+    .filter-bar { display: none; }
+    .cmd-row:hover { background: none; }
+    .section { break-inside: avoid; margin-bottom: 1rem; }
+    .part-divider { break-before: page; }
+    .tip { border-left: 2px solid #999; background: #f5f5f5; }
+    header h1 { -webkit-text-fill-color: #111; background: none; }
+  }
+
+  footer {
+    text-align: center; margin-top: 2.5rem; padding-top: 1.25rem;
+    border-top: 1px solid var(--border); color: var(--text-dim);
+    font-size: 0.75rem; font-family: var(--mono);
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<header>
+  <h1>Agentic AI — Complete Command Reference</h1>
+  <p>Part I: Every Claude Code slash command, CLI flag, shortcut, and skill.<br>Part II: Universal AI agent command glossary — the conceptual patterns behind any agentic system.</p>
+</header>
+
+<div class="filter-bar">
+  <div class="filter-group">
+    <button class="filter-btn active" data-filter="all">All</button>
+  </div>
+  <div class="filter-sep"></div>
+  <div class="filter-group">
+    <button class="filter-btn" data-filter="session">Session</button>
+    <button class="filter-btn" data-filter="context">Context</button>
+    <button class="filter-btn" data-filter="model">Model</button>
+    <button class="filter-btn" data-filter="config">Config</button>
+    <button class="filter-btn" data-filter="extensions">Extend</button>
+    <button class="filter-btn" data-filter="skills">Skills</button>
+    <button class="filter-btn" data-filter="p1agents">Agents</button>
+    <button class="filter-btn" data-filter="cli">CLI</button>
+    <button class="filter-btn" data-filter="shortcuts">Keys</button>
+    <button class="filter-btn" data-filter="custom">Custom</button>
+  </div>
+  <div class="filter-sep"></div>
+  <div class="filter-group">
+    <button class="filter-btn part-ii-btn" data-filter="orchestration">Orchestrate</button>
+    <button class="filter-btn part-ii-btn" data-filter="cognitive">Reason</button>
+    <button class="filter-btn part-ii-btn" data-filter="qa">QA</button>
+    <button class="filter-btn part-ii-btn" data-filter="memory">Memory</button>
+    <button class="filter-btn part-ii-btn" data-filter="toolenv">Tools</button>
+    <button class="filter-btn part-ii-btn" data-filter="guardrails">Guards</button>
+    <button class="filter-btn part-ii-btn" data-filter="output">Output</button>
+    <button class="filter-btn part-ii-btn" data-filter="collaboration">Collab</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- PART I: CLAUDE CODE PRACTICAL COMMANDS      -->
+<!-- ═══════════════════════════════════════════ -->
+
+<div class="part-divider part-divider-i" data-cat="all">
+  <span class="part-label part-label-i">Part I</span>
+  <span class="part-title">Claude Code — Practical Commands</span>
+  <span class="part-desc">Slash commands, CLI flags, keyboard shortcuts</span>
+</div>
+
+<div class="section s-session" data-cat="session">
+  <div class="section-header">
+    <div class="section-icon">⚡</div>
+    <div class="section-title">Session Management</div>
+    <div class="section-subtitle">Conversation lifecycle</div>
+  </div>
+  <div class="cmd-grid">
+    <div class="cmd-row"><div class="cmd-name">/clear</div><div class="cmd-desc">Wipe conversation history. Aliases: <code>/reset</code> <code>/new</code></div></div>
+    <div class="cmd-row"><div class="cmd-name">/compact [focus]</div><div class="cmd-desc">Summarize context to reclaim tokens while preserving thread. Use at ~80% context.</div></div>
+    <div class="cmd-row"><div class="cmd-name">/resume [id]</div><div class="cmd-desc">Resume a past session. Alias: <code>/continue</code></div></div>
+    <div class="cmd-row"><div class="cmd-name">/rename [name]</div><div class="cmd-desc">Rename the current session for easier recall.</div></div>
+    <div class="cmd-row"><div class="cmd-name">/branch [name]</div><div class="cmd-desc">Fork conversation at this point — like git branch for your session. Alias: <code>/fork</code></div></div>
+    <div class="cmd-row"><div class="cmd-name">/rewind</div><div class="cmd-desc">Roll back conversation AND code changes to an earlier checkpoint. Alias: <code>/checkpoint</code></div></div>
+    <div class="cmd-row"><div class="cmd-name">/export [file]</div><div class="cmd-desc">Export full conversation as text file.</div></div>
+    <div class="cmd-row"><div class="cmd-name">/copy [N]</div><div class="cmd-desc">Copy last (or Nth) response to clipboard.</div></div>
+    <div class="cmd-row"><div class="cmd-name">/exit</div><div class="cmd-desc">Exit Claude Code. Alias: <code>/quit</code></div></div>
+  </div>
+  <div class="tip tip-accent">💡 <code>/compact</code> at ~80% context. <code>/clear</code> when switching tasks entirely.</div>
+</div>
+
+<div class="section s-context" data-cat="context">
+  <div class="section-header">
+    <div class="section-icon">📊</div>
+    <div class="section-title">Context & Information</div>
+    <div class="section-subtitle">Visibility into usage & changes</div>
+  </div>
+  <div class="cmd-grid">
+    <div class="cmd-row"><div class="cmd-name">/context</div><div class="cmd-desc">Visual grid showing context window consumption — what's using space and how much remains.</div></div>
+    <div class="cmd-row"><div class="cmd-name">/usage</div><div class="cmd-desc">Show plan usage and rate limits.</div></div>
+    <div class="cmd-row"><div class="cmd-name">/cost</div><div class="cmd-desc">Token usage and estimated cost for current session.</div></div>
+    <div class="cmd-row"><div class="cmd-name">/diff</div><div class="cmd-desc">Interactive diff viewer — uncommitted git changes + Claude's per-turn changes.</div></div>
+    <div class="cmd-row"><div class="cmd-name">/doctor</div><div class="cmd-desc">Diagnose installation, settings, and environment issues.</div></div>
+    <div class="cmd-row"><div class="cmd-name">/insights</div><div class="cmd-desc">Analyze session patterns and identify friction points.</div></div>
+    <div class="cmd-row"><div class="cmd-name">/help</div><div class="cmd-desc">List all available commands including custom ones.</div></div>
+    <div class="cmd-row"><div class="cmd-name">/release-notes</div><div class="cmd-desc">View full changelog for current version.</div></div>
+    <div class="cmd-row"><div class="cmd-name">/pr-comments [PR]</div><div class="cmd-desc">Fetch GitHub PR review comments into context.</div></div>
+  </div>
+</div>
+
+<div class="section s-model" data-cat="model">
+  <div class="section-header">
+    <div class="section-icon">🧠</div>
+    <div class="section-title">Model & Mode Control</div>
+    <div class="section-subtitle">Reasoning depth & execution style</div>
+  </div>
+  <div class="cmd-grid">
+    <div class="cmd-row"><div class="cmd-name">/model [name]</div><div class="cmd-desc">Switch model mid-session. Arrow keys adjust effort level in picker.</div></div>
+    <div class="cmd-row"><div class="cmd-name">/effort [level]</div><div class="cmd-desc">Set reasoning depth: <code>low</code> <code>medium</code> <code>high</code> <code>max</code> <code>auto</code>. <code>max</code> = Opus 4.6 deep think.</div></div>
+    <div class="cmd-row"><div class="cmd-name">/fast [on|off]</div><div class="cmd-desc">Speed-optimized API settings (same model, faster params). Great for rapid iteration.</div></div>
+    <div class="cmd-row"><div class="cmd-name">/plan [desc]</div><div class="cmd-desc">Read-only reasoning mode — Claude analyzes and plans without executing changes.</div></div>
+    <div class="cmd-row"><div class="cmd-name">/sandbox</div><div class="cmd-desc">Toggle sandboxed execution for risky operations.</div></div>
+  </div>
+  <div class="tip tip-green">💡 <code>/effort low</code> for mechanical tasks. <code>/effort max</code> for complex architecture decisions (Opus 4.6 only).</div>
+</div>
+
+<div class="section s-config" data-cat="config">
+  <div class="section-header">
+    <div class="section-icon">⚙️</div>
+    <div class="section-title">Configuration & Permissions</div>
+    <div class="section-subtitle">Settings, memory & rules</div>
+  </div>
+  <div class="cmd-grid">
+    <div class="cmd-row"><div class="cmd-name">/config</div><div class="cmd-desc">Open settings UI (theme, model prefs, output style). Alias: <code>/settings</code></div></div>
+    <div class="cmd-row"><div class="cmd-name">/permissions</div><div class="cmd-desc">Manage allow / ask / deny rules at project/global scope. Alias: <code>/allowed-tools</code></div></div>
+    <div class="cmd-row"><div class="cmd-name">/memory</div><div class="cmd-desc">Edit CLAUDE.md and auto-memory. Claude saves build commands, debugging insights, conventions.</div></div>
+    <div class="cmd-row"><div class="cmd-name">/init</div><div class="cmd-desc">Bootstrap project with a CLAUDE.md file for coding standards and context.</div></div>
+    <div class="cmd-row"><div class="cmd-name">/hooks</div><div class="cmd-desc">View lifecycle hooks — shell commands that run before/after Claude actions.</div></div>
+    <div class="cmd-row"><div class="cmd-name">/keybindings</div><div class="cmd-desc">Open keybinding configuration file.</div></div>
+    <div class="cmd-row"><div class="cmd-name">/login / /logout</div><div class="cmd-desc">Sign in or out of Anthropic account.</div></div>
+    <div class="cmd-row"><div class="cmd-name">/privacy-settings</div><div class="cmd-desc">Update privacy preferences (Pro/Max plans).</div></div>
+    <div class="cmd-row"><div class="cmd-name">/extra-usage</div><div class="cmd-desc">Configure pay-as-you-go overflow when plan limits hit.</div></div>
+    <div class="cmd-row"><div class="cmd-name">/color [color]</div><div class="cmd-desc">Set prompt bar color — visually distinguish parallel sessions.</div></div>
+  </div>
+</div>
+
+<div class="section s-extensions" data-cat="extensions">
+  <div class="section-header">
+    <div class="section-icon">🔌</div>
+    <div class="section-title">Extensions & Integrations</div>
+    <div class="section-subtitle">MCP, plugins, IDE & team tools</div>
+  </div>
+  <div class="cmd-grid">
+    <div class="cmd-row"><div class="cmd-name">/mcp</div><div class="cmd-desc">Manage MCP server connections. Servers expose tools as <code>/mcp__&lt;server&gt;__&lt;prompt&gt;</code> commands.</div></div>
+    <div class="cmd-row"><div class="cmd-name">/plugin</div><div class="cmd-desc">Manage plugins — install, remove, discover from marketplaces.</div></div>
+    <div class="cmd-row"><div class="cmd-name">/reload-plugins</div><div class="cmd-desc">Hot-reload all active plugins without restarting.</div></div>
+    <div class="cmd-row"><div class="cmd-name">/agents</div><div class="cmd-desc">Manage sub-agent configurations.</div></div>
+    <div class="cmd-row"><div class="cmd-name">/chrome</div><div class="cmd-desc">Configure browser automation integration.</div></div>
+    <div class="cmd-row"><div class="cmd-name">/ide</div><div class="cmd-desc">Manage IDE integrations (VS Code, Cursor, JetBrains).</div></div>
+    <div class="cmd-row"><div class="cmd-name">/install-github-app</div><div class="cmd-desc">Set up Claude GitHub App for PR reviews via GitHub Actions.</div></div>
+    <div class="cmd-row"><div class="cmd-name">/install-slack-app</div><div class="cmd-desc">Install Claude for Slack integration.</div></div>
+    <div class="cmd-row"><div class="cmd-name">/add-dir &lt;path&gt;</div><div class="cmd-desc">Add an additional working directory for this session.</div></div>
+    <div class="cmd-row"><div class="cmd-name">/desktop</div><div class="cmd-desc">Open session in the Desktop app. Alias: <code>/app</code></div></div>
+    <div class="cmd-row"><div class="cmd-name">/remote-control</div><div class="cmd-desc">Enable remote control from claude.ai. Alias: <code>/rc</code></div></div>
+  </div>
+</div>
+
+<div class="section s-skills" data-cat="skills">
+  <div class="section-header">
+    <div class="section-icon">🎯</div>
+    <div class="section-title">Bundled Skills</div>
+    <div class="section-subtitle">Multi-agent workflows out of the box</div>
+  </div>
+  <div class="cmd-grid">
+    <div class="cmd-row"><div class="cmd-name">/simplify</div><div class="cmd-desc">3-agent parallel code review. Replaced the older <code>/review</code> command.</div></div>
+    <div class="cmd-row"><div class="cmd-name">/batch &lt;task&gt;</div><div class="cmd-desc">Run a task across multiple files simultaneously.</div></div>
+    <div class="cmd-row"><div class="cmd-name">/debug</div><div class="cmd-desc">Structured debugging workflow — reads errors, proposes fixes, tests iteratively.</div></div>
+    <div class="cmd-row"><div class="cmd-name">/loop [interval] &lt;prompt&gt;</div><div class="cmd-desc">Recurring prompt on a schedule. E.g., <code>/loop 5m check deploy status</code>. Units: <code>s m h d</code>.</div></div>
+    <div class="cmd-row"><div class="cmd-name">/schedule [desc]</div><div class="cmd-desc">Create cloud-hosted scheduled task (persists beyond session).</div></div>
+    <div class="cmd-row"><div class="cmd-name">/security-review</div><div class="cmd-desc">Scan current branch diff for vulnerabilities (SQLi, XSS, exposed creds).</div></div>
+    <div class="cmd-row"><div class="cmd-name">/btw &lt;question&gt;</div><div class="cmd-desc">Quick side question — no context cost, keeps main conversation clean.</div></div>
+    <div class="cmd-row"><div class="cmd-name">/claude-api</div><div class="cmd-desc">Quick reference for Anthropic API usage patterns.</div></div>
+  </div>
+  <div class="tip tip-cyan">💡 <code>/loop 5m check if CI passed</code> — great for monitoring deploys. Session-scoped; dies on exit.</div>
+</div>
+
+<div class="section s-p1agents" data-cat="p1agents">
+  <div class="section-header">
+    <div class="section-icon">🤖</div>
+    <div class="section-title">Multi-Agent & Orchestration</div>
+    <div class="section-subtitle">Agent Teams, sub-agents, parallel work</div>
+  </div>
+  <div class="cmd-grid">
+    <div class="cmd-row"><div class="cmd-name">Agent Teams</div><div class="cmd-desc">Enable with <code>CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1</code>. Lead agent spawns teammates, coordinates via shared task list.</div></div>
+    <div class="cmd-row"><div class="cmd-name">/agents</div><div class="cmd-desc">View and manage sub-agent configurations. Define in <code>.claude/agents/</code>.</div></div>
+    <div class="cmd-row"><div class="cmd-name">context: fork</div><div class="cmd-desc">Skill frontmatter — runs skill in a forked sub-agent to avoid polluting main context.</div></div>
+    <div class="cmd-row"><div class="cmd-name">Agent SDK</div><div class="cmd-desc"><code>@anthropic-ai/claude-agent-sdk</code> — Full control over orchestration, tools, and permissions.</div></div>
+    <div class="cmd-row"><div class="cmd-name">Builder-Validator</div><div class="cmd-desc">Pattern: one agent builds, another validates. Exploration → B-V for implementation.</div></div>
+    <div class="cmd-row"><div class="cmd-name">Parallel Sessions</div><div class="cmd-desc">Multiple <code>claude</code> instances in different terminals/worktrees for true parallelism.</div></div>
+  </div>
+  <div class="tip tip-indigo">💡 Agent Teams for collaborative exploration, then builder-validator chains for quality-gated implementation.</div>
+</div>
+
+<div class="section s-cli" data-cat="cli">
+  <div class="section-header">
+    <div class="section-icon">🚩</div>
+    <div class="section-title">CLI Flags</div>
+    <div class="section-subtitle">Terminal & scripting options</div>
+  </div>
+  <div class="cmd-grid">
+    <div class="cmd-row"><div class="cmd-name">claude -p "prompt"</div><div class="cmd-desc">Non-interactive single prompt. Scriptable for CI, cron, and automation.</div></div>
+    <div class="cmd-row"><div class="cmd-name">--output-format json</div><div class="cmd-desc">Machine-readable output. Options: <code>json</code> <code>stream-json</code> <code>text</code></div></div>
+    <div class="cmd-row"><div class="cmd-name">--model &lt;name&gt;</div><div class="cmd-desc">Choose model at launch.</div></div>
+    <div class="cmd-row"><div class="cmd-name">--dangerously-skip-permissions</div><div class="cmd-desc">No approval prompts. CI/cron only — scope prompts tightly.</div></div>
+    <div class="cmd-row"><div class="cmd-name">--allowedTools "Bash,Read"</div><div class="cmd-desc">Pre-approve specific tools. More granular than skip-permissions.</div></div>
+    <div class="cmd-row"><div class="cmd-name">--permission-mode acceptEdits</div><div class="cmd-desc">Auto-accept file writes, still prompt for other actions.</div></div>
+    <div class="cmd-row"><div class="cmd-name">--append-system-prompt</div><div class="cmd-desc">Add to system prompt (preserves built-ins). Preferred for most use cases.</div></div>
+    <div class="cmd-row"><div class="cmd-name">--system-prompt-file f.md</div><div class="cmd-desc">Replace system prompt entirely from a file.</div></div>
+    <div class="cmd-row"><div class="cmd-name">--continue / --resume &lt;id&gt;</div><div class="cmd-desc">Resume most recent or specific session by ID.</div></div>
+    <div class="cmd-row"><div class="cmd-name">--bare</div><div class="cmd-desc">Skip hooks, skills, MCP, plugins, auto-memory. Clean for CI.</div></div>
+    <div class="cmd-row"><div class="cmd-name">--json-schema '{...}'</div><div class="cmd-desc">Enforce structured output schema on response.</div></div>
+  </div>
+  <div class="tip tip-orange">💡 <code>echo 'cd /project && claude -p "$(cat prompt.md)" > out.md 2>&1' | at 21:30</code></div>
+</div>
+
+<div class="section s-shortcuts" data-cat="shortcuts">
+  <div class="section-header">
+    <div class="section-icon">⌨️</div>
+    <div class="section-title">Keyboard Shortcuts</div>
+    <div class="section-subtitle">Speed up your workflow</div>
+  </div>
+  <div class="cmd-grid">
+    <div class="cmd-row"><div class="cmd-name">Shift + Tab</div><div class="cmd-desc">Cycle modes: normal → auto-accept → plan. The most-used shortcut.</div></div>
+    <div class="cmd-row"><div class="cmd-name">Ctrl + O</div><div class="cmd-desc">Toggle verbose / extended thinking output.</div></div>
+    <div class="cmd-row"><div class="cmd-name">Ctrl + R</div><div class="cmd-desc">Reverse search command history.</div></div>
+    <div class="cmd-row"><div class="cmd-name">Ctrl + F × 2</div><div class="cmd-desc">Kill all background agents (press twice rapidly).</div></div>
+    <div class="cmd-row"><div class="cmd-name">Esc</div><div class="cmd-desc">Cancel current generation or exit menu.</div></div>
+    <div class="cmd-row"><div class="cmd-name">@ file</div><div class="cmd-desc">Attach file or directory to context inline.</div></div>
+    <div class="cmd-row"><div class="cmd-name">! command</div><div class="cmd-desc">Run shell command with conversation context. E.g., <code>! git status</code></div></div>
+    <div class="cmd-row"><div class="cmd-name">/vim</div><div class="cmd-desc">Enable vim keybindings in the prompt editor.</div></div>
+  </div>
+</div>
+
+<div class="section s-custom" data-cat="custom">
+  <div class="section-header">
+    <div class="section-icon">🛠️</div>
+    <div class="section-title">Custom Skills & Commands</div>
+    <div class="section-subtitle">Build your own agentic workflows</div>
+  </div>
+  <div class="cmd-grid">
+    <div class="cmd-row"><div class="cmd-name">~/.claude/skills/</div><div class="cmd-desc">Personal skills — available across all projects. Add <code>SKILL.md</code> with YAML frontmatter.</div></div>
+    <div class="cmd-row"><div class="cmd-name">.claude/skills/</div><div class="cmd-desc">Project skills — shared via git with your team.</div></div>
+    <div class="cmd-row"><div class="cmd-name">.claude/commands/</div><div class="cmd-desc">Legacy commands — still work. Skills recommended for new commands.</div></div>
+    <div class="cmd-row"><div class="cmd-name">allowed-tools</div><div class="cmd-desc">Frontmatter: grant tool access without per-use approval. E.g., <code>Bash(git add:*)</code></div></div>
+    <div class="cmd-row"><div class="cmd-name">model: haiku</div><div class="cmd-desc">Frontmatter: override model per skill. Use <code>haiku</code> for cheap repetitive tasks.</div></div>
+    <div class="cmd-row"><div class="cmd-name">context: fork</div><div class="cmd-desc">Frontmatter: run in a sub-agent so it doesn't pollute main context.</div></div>
+    <div class="cmd-row"><div class="cmd-name">$ARGUMENTS</div><div class="cmd-desc">Capture args passed after the command. <code>/fix-issue 123 high</code> → <code>"123 high"</code></div></div>
+    <div class="cmd-row"><div class="cmd-name">disable-model-invocation</div><div class="cmd-desc">Frontmatter: prevent auto-invocation. Explicit <code>/command</code> only.</div></div>
+  </div>
+  <div class="tip tip-green">💡 Your <code>~/.claude/skills/</code> synced across machines via git is the highest-leverage setup.</div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- PART II: AI AGENT COMMAND GLOSSARY          -->
+<!-- ═══════════════════════════════════════════ -->
+
+<div class="part-divider part-divider-ii" data-cat="all">
+  <span class="part-label part-label-ii">Part II</span>
+  <span class="part-title">AI Agent Command Glossary</span>
+  <span class="part-desc">Universal patterns for any agentic system</span>
+</div>
+
+<!-- I. WORKFLOW ORCHESTRATION -->
+<div class="section s-orchestration" data-cat="orchestration">
+  <div class="section-header">
+    <div class="section-icon">🔀</div>
+    <div class="section-num">I.</div>
+    <div class="section-title">Workflow Orchestration</div>
+    <div class="section-subtitle">Task decomposition & coordination</div>
+  </div>
+  <div class="cmd-grid">
+    <div class="cmd-row"><div class="cmd-name">Decompose</div><div class="cmd-desc">Split a complex goal into granular, executable steps with clear dependencies.</div></div>
+    <div class="cmd-row"><div class="cmd-name">Route</div><div class="cmd-desc">Assign tasks to specialized sub-agents based on capability matching.</div></div>
+    <div class="cmd-row"><div class="cmd-name">Parallelize</div><div class="cmd-desc">Run non-dependent tasks simultaneously to compress wall-clock time.</div></div>
+    <div class="cmd-row"><div class="cmd-name">Handoff</div><div class="cmd-desc">Transfer full context between agents or back to a human operator.</div></div>
+    <div class="cmd-row"><div class="cmd-name">Synchronize</div><div class="cmd-desc">Ensure all agents are working off the latest data version before proceeding.</div></div>
+    <div class="cmd-row"><div class="cmd-name">Replan</div><div class="cmd-desc">Revise the task graph mid-execution when assumptions break or new info emerges.</div></div>
+    <div class="cmd-row"><div class="cmd-name">Checkpoint</div><div class="cmd-desc">Save full state at a known-good point so you can roll back if a path fails.</div></div>
+    <div class="cmd-row"><div class="cmd-name">Backtrack</div><div class="cmd-desc">Abandon a failing path and revert to the last checkpoint to try an alternative approach.</div></div>
+  </div>
+  <div class="tip tip-cyan">💡 Replan ≠ Reflect. Reflect is post-hoc analysis; Replan is in-flight course correction while tasks are still running.</div>
+</div>
+
+<!-- II. COGNITIVE & REASONING -->
+<div class="section s-cognitive" data-cat="cognitive">
+  <div class="section-header">
+    <div class="section-icon">💭</div>
+    <div class="section-num">II.</div>
+    <div class="section-title">Cognitive & Reasoning Commands</div>
+    <div class="section-subtitle">How the agent thinks</div>
+  </div>
+  <div class="cmd-grid">
+    <div class="cmd-row"><div class="cmd-name">Chain-of-Thought</div><div class="cmd-desc">Document every logical step taken. Makes reasoning auditable and debuggable.</div></div>
+    <div class="cmd-row"><div class="cmd-name">ReAct Loop</div><div class="cmd-desc">Iteratively Think → Act → Observe. The core agent execution cycle.</div></div>
+    <div class="cmd-row"><div class="cmd-name">Step-Back</div><div class="cmd-desc">Identify core principles before specific execution. "What problem am I actually solving?"</div></div>
+    <div class="cmd-row"><div class="cmd-name">Self-Consistency</div><div class="cmd-desc">Generate multiple solutions via different reasoning paths and pick the most common/best one.</div></div>
+    <div class="cmd-row"><div class="cmd-name">Reflect</div><div class="cmd-desc">Critically analyze the previous output for errors, gaps, or unstated assumptions.</div></div>
+  </div>
+  <div class="tip tip-indigo">💡 In Claude Code: <code>/effort max</code> deepens Chain-of-Thought. <code>/plan</code> is a Step-Back. <code>/simplify</code> runs Self-Consistency via 3 parallel reviewers.</div>
+</div>
+
+<!-- III. QUALITY ASSURANCE -->
+<div class="section s-qa" data-cat="qa">
+  <div class="section-header">
+    <div class="section-icon">✅</div>
+    <div class="section-num">III.</div>
+    <div class="section-title">Quality Assurance & Remediation</div>
+    <div class="section-subtitle">Verify, validate, fix</div>
+  </div>
+  <div class="cmd-grid">
+    <div class="cmd-row"><div class="cmd-name">Audit</div><div class="cmd-desc">Verify output against strict compliance, security, or data rules.</div></div>
+    <div class="cmd-row"><div class="cmd-name">Validate</div><div class="cmd-desc">Fact-check against a "Ground Truth" source — docs, tests, schema, or API response.</div></div>
+    <div class="cmd-row"><div class="cmd-name">Refactor</div><div class="cmd-desc">Rewrite logic for better performance or clarity — not just patching symptoms.</div></div>
+    <div class="cmd-row"><div class="cmd-name">Stress-Test</div><div class="cmd-desc">Find the breaking point of a plan, code path, or architecture under edge cases.</div></div>
+    <div class="cmd-row"><div class="cmd-name">Remediate</div><div class="cmd-desc">Address the root cause of an identified bug, not just the surface error.</div></div>
+  </div>
+  <div class="tip tip-red">💡 In Claude Code: <code>/security-review</code> = Audit on branch diff. <code>/debug</code> = Remediate loop (read error → fix → test → iterate).</div>
+</div>
+
+<!-- IV. MEMORY & INFORMATION FLOW -->
+<div class="section s-memory" data-cat="memory">
+  <div class="section-header">
+    <div class="section-icon">🗄️</div>
+    <div class="section-num">IV.</div>
+    <div class="section-title">Memory & Information Flow</div>
+    <div class="section-subtitle">Context acquisition, management & persistence</div>
+  </div>
+  <div class="cmd-grid">
+    <div class="cmd-row"><div class="cmd-name">Ground</div><div class="cmd-desc">Restrict responses to provided reference materials only — no hallucination allowed.</div></div>
+    <div class="cmd-row"><div class="cmd-name">Synthesize</div><div class="cmd-desc">Create a "State of the Project" summary from raw, scattered data sources.</div></div>
+    <div class="cmd-row"><div class="cmd-name">Prune</div><div class="cmd-desc">Clear outdated context to focus the agent's attention on what's current.</div></div>
+    <div class="cmd-row"><div class="cmd-name">Commit</div><div class="cmd-desc">Store key results in long-term persistent memory for future sessions.</div></div>
+    <div class="cmd-row"><div class="cmd-name">Retrieve</div><div class="cmd-desc">RAG-style lookup from a knowledge base, vector store, or document corpus.</div></div>
+    <div class="cmd-row"><div class="cmd-name">Search</div><div class="cmd-desc">Web or codebase search to fill knowledge gaps the agent can't answer from memory.</div></div>
+    <div class="cmd-row"><div class="cmd-name">Inspect</div><div class="cmd-desc">Read the current state of the environment — filesystem, database, API response, logs.</div></div>
+    <div class="cmd-row"><div class="cmd-name">Attach</div><div class="cmd-desc">Pull specific artifacts (files, docs, images) into the working context on demand.</div></div>
+  </div>
+  <div class="tip tip-amber">💡 In Claude Code: <code>/compact</code> = Prune. <code>/memory</code> = Commit. <code>@file</code> = Attach. MCP servers = Retrieve from external sources.</div>
+</div>
+
+<!-- V. TOOL USE & ENVIRONMENT -->
+<div class="section s-toolenv" data-cat="toolenv">
+  <div class="section-header">
+    <div class="section-icon">🔧</div>
+    <div class="section-num">V.</div>
+    <div class="section-title">Tool Use & Environment Interaction</div>
+    <div class="section-subtitle">What makes agents agentic</div>
+  </div>
+  <div class="cmd-grid">
+    <div class="cmd-row"><div class="cmd-name">Invoke</div><div class="cmd-desc">Call an external tool, API, or function and parse the structured result.</div></div>
+    <div class="cmd-row"><div class="cmd-name">Observe</div><div class="cmd-desc">Read the environment state after an action — the "O" in ReAct, independently named.</div></div>
+    <div class="cmd-row"><div class="cmd-name">Sandbox</div><div class="cmd-desc">Execute code or commands in an isolated environment to prevent unintended side effects.</div></div>
+    <div class="cmd-row"><div class="cmd-name">Escalate</div><div class="cmd-desc">Recognize when a task exceeds the agent's capability and surface it to a human or higher-privilege system.</div></div>
+    <div class="cmd-row"><div class="cmd-name">Transform</div><div class="cmd-desc">Convert data between formats (JSON→XML, CSV→SQL, Mermaid→image) as an intermediate step.</div></div>
+    <div class="cmd-row"><div class="cmd-name">Retry</div><div class="cmd-desc">Re-execute a failed tool call with adjusted parameters or after a backoff delay.</div></div>
+  </div>
+  <div class="tip tip-green">💡 In Claude Code: <code>! command</code> = Invoke + Observe in one step. <code>/sandbox</code> = Sandbox. Plan mode forces Observe before Act.</div>
+</div>
+
+<!-- VI. GUARD RAILS & CONTROL FLOW -->
+<div class="section s-guardrails" data-cat="guardrails">
+  <div class="section-header">
+    <div class="section-icon">🛡️</div>
+    <div class="section-num">VI.</div>
+    <div class="section-title">Guard Rails & Control Flow</div>
+    <div class="section-subtitle">Prevent bad actions before they happen</div>
+  </div>
+  <div class="cmd-grid">
+    <div class="cmd-row"><div class="cmd-name">Constrain</div><div class="cmd-desc">Enforce boundaries on what the agent is allowed to do — tool permissions, token budgets, scope limits.</div></div>
+    <div class="cmd-row"><div class="cmd-name">Gate</div><div class="cmd-desc">Require explicit human approval before irreversible or high-risk actions.</div></div>
+    <div class="cmd-row"><div class="cmd-name">Abort</div><div class="cmd-desc">Hard-stop execution when a safety threshold, cost limit, or error budget is breached.</div></div>
+    <div class="cmd-row"><div class="cmd-name">Throttle</div><div class="cmd-desc">Rate-limit agent actions to prevent runaway loops, API exhaustion, or cost overruns.</div></div>
+    <div class="cmd-row"><div class="cmd-name">Scope</div><div class="cmd-desc">Restrict the agent's view to only the files, data, or systems relevant to the current task.</div></div>
+    <div class="cmd-row"><div class="cmd-name">Fence</div><div class="cmd-desc">Define explicit "never do this" rules — immutable constraints the agent cannot override.</div></div>
+  </div>
+  <div class="tip tip-red">💡 In Claude Code: <code>/permissions</code> = Constrain. Plan mode = Gate. <code>Ctrl+F×2</code> = Abort. <code>--allowedTools</code> = Scope.</div>
+</div>
+
+<!-- VII. OUTPUT & DELIVERY -->
+<div class="section s-output" data-cat="output">
+  <div class="section-header">
+    <div class="section-icon">📤</div>
+    <div class="section-num">VII.</div>
+    <div class="section-title">Output & Delivery</div>
+    <div class="section-subtitle">How agents deliver results</div>
+  </div>
+  <div class="cmd-grid">
+    <div class="cmd-row"><div class="cmd-name">Emit</div><div class="cmd-desc">Produce a structured output artifact — JSON, file, diff, commit, PR, or API response.</div></div>
+    <div class="cmd-row"><div class="cmd-name">Summarize</div><div class="cmd-desc">Compress a long working session into a concise deliverable for the human.</div></div>
+    <div class="cmd-row"><div class="cmd-name">Present</div><div class="cmd-desc">Format and deliver results in context-appropriate form — diff, report, Slack message, dashboard.</div></div>
+    <div class="cmd-row"><div class="cmd-name">Narrate</div><div class="cmd-desc">Provide a running explanation of what the agent is doing and why — builds trust and debuggability.</div></div>
+    <div class="cmd-row"><div class="cmd-name">Log</div><div class="cmd-desc">Record actions, decisions, and outcomes for later audit without cluttering the main output.</div></div>
+  </div>
+  <div class="tip tip-sky">💡 In Claude Code: <code>/export</code> = Log. <code>/copy</code> = Emit to clipboard. <code>/diff</code> = Present. <code>Ctrl+O</code> = Narrate (verbose thinking).</div>
+</div>
+
+<!-- VIII. COLLABORATION & MULTI-AGENT -->
+<div class="section s-collaboration" data-cat="collaboration">
+  <div class="section-header">
+    <div class="section-icon">🤝</div>
+    <div class="section-num">VIII.</div>
+    <div class="section-title">Collaboration & Multi-Agent</div>
+    <div class="section-subtitle">Agents working together</div>
+  </div>
+  <div class="cmd-grid">
+    <div class="cmd-row"><div class="cmd-name">Delegate</div><div class="cmd-desc">Assign a scoped sub-task to a sub-agent with its own context fork. Distinct from Route (which chooses the agent).</div></div>
+    <div class="cmd-row"><div class="cmd-name">Merge</div><div class="cmd-desc">Combine outputs from parallel agents into a single coherent result.</div></div>
+    <div class="cmd-row"><div class="cmd-name">Negotiate</div><div class="cmd-desc">Agents resolve conflicting outputs or approaches through structured debate.</div></div>
+    <div class="cmd-row"><div class="cmd-name">Vote</div><div class="cmd-desc">Ensemble pattern — multiple agents weigh in and the majority/best answer wins.</div></div>
+    <div class="cmd-row"><div class="cmd-name">Supervise</div><div class="cmd-desc">A lead agent monitors sub-agents, intervening only when they stall, conflict, or exceed bounds.</div></div>
+    <div class="cmd-row"><div class="cmd-name">Broadcast</div><div class="cmd-desc">Push a state update, constraint change, or new context to all active agents simultaneously.</div></div>
+  </div>
+  <div class="tip tip-fuchsia">💡 In Claude Code: Agent Teams = Supervise + Delegate + Merge. <code>/simplify</code> = Vote (3 reviewers). <code>context: fork</code> = Delegate.</div>
+</div>
+
+<footer>
+  Agentic AI — Complete Command Reference · April 2026<br>
+  Part I: code.claude.com, Anthropic docs · Part II: Universal agent patterns
+</footer>
+
+</div>
+
+<script>
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const filter = btn.dataset.filter;
+      document.querySelectorAll('.section').forEach(s => {
+        s.style.display = (filter === 'all' || s.dataset.cat === filter) ? '' : 'none';
+      });
+      document.querySelectorAll('.part-divider').forEach(d => {
+        d.style.display = (filter === 'all') ? '' : 'none';
+      });
+    });
+  });
+</script>
+</body>
+</html>
