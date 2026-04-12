@@ -503,6 +503,7 @@ const CSS = `  :root {
     font-family: var(--sans);
     line-height: 1.6;
     padding: 2rem 1.5rem;
+    padding-right: 240px; /* reserve gutter for fixed TOC */
   }
 
   .container { max-width: 1200px; margin: 0 auto; }
@@ -715,7 +716,7 @@ const CSS = `  :root {
   .toc {
     position: fixed;
     top: 90px;
-    right: max(1rem, calc((100vw - 1200px) / 2 - 220px));
+    right: 1rem;
     width: 200px;
     max-height: calc(100vh - 120px);
     overflow-y: auto;
@@ -784,9 +785,8 @@ const CSS = `  :root {
     box-shadow: 0 4px 12px rgba(0,0,0,0.4);
   }
 
-  @media (max-width: 1400px) { .toc { right: 1rem; } }
-
   @media (max-width: 1100px) {
+    body { padding-right: 1.5rem; } /* release gutter; TOC becomes drawer */
     .toc {
       transform: translateX(calc(100% + 1.5rem));
       opacity: 0;
