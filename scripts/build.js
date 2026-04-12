@@ -384,6 +384,11 @@ function renderFilterBar() {
     b.push('    <button class="filter-btn part-ii-btn" data-filter="' + cat + '">' + label + '</button>');
   }
   b.push('  </div>');
+  b.push('  <div class="filter-sep"></div>');
+  b.push('  <div class="filter-group filter-search">');
+  b.push('    <input type="search" id="search-input" class="search-input" placeholder="Search commands… (/)" autocomplete="off" spellcheck="false" />');
+  b.push('    <span class="search-count" id="search-count"></span>');
+  b.push('  </div>');
   return '<div class="filter-bar">\n' + b.join('\n') + '\n</div>';
 }
 
@@ -439,6 +444,8 @@ function render(doc) {
     '</header>',
     '',
     renderFilterBar(),
+    '',
+    '<div class="empty-state" id="empty-state">No commands match your search.</div>',
     '',
     parts,
     '',
@@ -610,6 +617,43 @@ const CSS = `  :root {
   .filter-btn.active { background: var(--accent-dim); border-color: var(--accent); color: var(--accent); }
   .filter-btn.part-ii-btn.active { background: var(--cyan-dim); border-color: var(--cyan); color: var(--cyan); }
   .filter-btn.part-ii-btn:hover { border-color: var(--cyan); }
+
+  .search-input {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    padding: 0.3rem 0.6rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    border-radius: 4px;
+    width: 220px;
+    outline: none;
+    transition: border-color 0.15s, width 0.2s;
+  }
+  .search-input::placeholder { color: var(--text-dim); opacity: 0.7; }
+  .search-input:focus { border-color: var(--accent); width: 280px; }
+  .search-count {
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    color: var(--text-dim);
+    margin-left: 0.4rem;
+    min-width: 3.5rem;
+  }
+  .empty-state {
+    display: none;
+    padding: 2rem 1rem;
+    text-align: center;
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    color: var(--text-dim);
+  }
+  .empty-state.show { display: block; }
+  mark.search-hit {
+    background: var(--accent-dim);
+    color: var(--accent);
+    padding: 0 0.1em;
+    border-radius: 2px;
+  }
 
   .section { margin-bottom: 2rem; animation: fadeIn 0.3s ease; scroll-margin-top: 90px; }
   @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
@@ -860,19 +904,84 @@ const CSS = `  :root {
   }`;
 
 // Client-side JS: preserved filter-bar behavior + TOC scrollspy & drawer.
-const SCRIPT_JS = `  document.querySelectorAll('.filter-btn').forEach(function (btn) {
+const SCRIPT_JS = `  var activeFilter = 'all';
+  var searchQuery = '';
+  var searchInput = document.getElementById('search-input');
+  var searchCount = document.getElementById('search-count');
+  var emptyState = document.getElementById('empty-state');
+
+  // Pre-index row text once so per-keystroke filtering stays cheap.
+  var rowIndex = Array.prototype.map.call(document.querySelectorAll('.cmd-row'), function (row) {
+    return { el: row, text: row.textContent.toLowerCase() };
+  });
+
+  function applyFilters() {
+    var q = searchQuery;
+    var totalVisible = 0;
+    document.querySelectorAll('.section').forEach(function (s) {
+      var catMatch = (activeFilter === 'all' || s.dataset.cat === activeFilter);
+      if (!catMatch) { s.style.display = 'none'; return; }
+
+      if (!q) {
+        s.style.display = '';
+        s.querySelectorAll('.cmd-row').forEach(function (r) { r.style.display = ''; });
+        s.querySelectorAll('.subsection-label').forEach(function (l) { l.style.display = ''; });
+        s.querySelectorAll('.tip').forEach(function (t) { t.style.display = ''; });
+        totalVisible += s.querySelectorAll('.cmd-row').length;
+        return;
+      }
+
+      var anyMatch = false;
+      var rows = s.querySelectorAll('.cmd-row');
+      rows.forEach(function (r) {
+        var text = r.textContent.toLowerCase();
+        var hit = text.indexOf(q) !== -1;
+        r.style.display = hit ? '' : 'none';
+        if (hit) { anyMatch = true; totalVisible++; }
+      });
+      s.querySelectorAll('.subsection-label').forEach(function (l) { l.style.display = 'none'; });
+      s.querySelectorAll('.tip').forEach(function (t) { t.style.display = 'none'; });
+      s.style.display = anyMatch ? '' : 'none';
+    });
+    document.querySelectorAll('.part-divider').forEach(function (d) {
+      d.style.display = (activeFilter === 'all' && !q) ? '' : 'none';
+    });
+    if (searchCount) {
+      searchCount.textContent = q ? (totalVisible + ' / ' + rowIndex.length) : '';
+    }
+    if (emptyState) {
+      emptyState.classList.toggle('show', q.length > 0 && totalVisible === 0);
+    }
+  }
+
+  document.querySelectorAll('.filter-btn').forEach(function (btn) {
     btn.addEventListener('click', function () {
       document.querySelectorAll('.filter-btn').forEach(function (b) { b.classList.remove('active'); });
       btn.classList.add('active');
-      var filter = btn.dataset.filter;
-      document.querySelectorAll('.section').forEach(function (s) {
-        s.style.display = (filter === 'all' || s.dataset.cat === filter) ? '' : 'none';
-      });
-      document.querySelectorAll('.part-divider').forEach(function (d) {
-        d.style.display = (filter === 'all') ? '' : 'none';
-      });
+      activeFilter = btn.dataset.filter;
+      applyFilters();
     });
   });
+
+  if (searchInput) {
+    searchInput.addEventListener('input', function () {
+      searchQuery = searchInput.value.trim().toLowerCase();
+      applyFilters();
+    });
+    document.addEventListener('keydown', function (e) {
+      var tag = (document.activeElement && document.activeElement.tagName) || '';
+      if (e.key === '/' && tag !== 'INPUT' && tag !== 'TEXTAREA') {
+        e.preventDefault();
+        searchInput.focus();
+        searchInput.select();
+      } else if (e.key === 'Escape' && document.activeElement === searchInput) {
+        searchInput.value = '';
+        searchQuery = '';
+        applyFilters();
+        searchInput.blur();
+      }
+    });
+  }
 
   (function () {
     var toc = document.querySelector('.toc');
