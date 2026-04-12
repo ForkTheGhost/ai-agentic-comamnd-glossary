@@ -1,0 +1,1132 @@
+{
+  "version": "2026-04",
+  "source": "agentic-ai-complete-reference.md",
+  "generated_at": "2026-04-12T13:26:23.232Z",
+  "commands": [
+    {
+      "part": "I",
+      "section": "Session Management",
+      "name": "/clear",
+      "description": "Wipe conversation history.",
+      "aliases": [
+        "/reset",
+        "/new"
+      ]
+    },
+    {
+      "part": "I",
+      "section": "Session Management",
+      "name": "/compact [focus]",
+      "description": "Summarize context to reclaim tokens while preserving thread. Use at ~80% context."
+    },
+    {
+      "part": "I",
+      "section": "Session Management",
+      "name": "/resume [id]",
+      "description": "Resume a past session.",
+      "aliases": [
+        "/continue"
+      ]
+    },
+    {
+      "part": "I",
+      "section": "Session Management",
+      "name": "/rename [name]",
+      "description": "Rename the current session for easier recall."
+    },
+    {
+      "part": "I",
+      "section": "Session Management",
+      "name": "/branch [name]",
+      "description": "Fork conversation at this point — like git branch for your session.",
+      "aliases": [
+        "/fork"
+      ]
+    },
+    {
+      "part": "I",
+      "section": "Session Management",
+      "name": "/rewind",
+      "description": "Roll back conversation AND code changes to an earlier checkpoint.",
+      "aliases": [
+        "/checkpoint"
+      ]
+    },
+    {
+      "part": "I",
+      "section": "Session Management",
+      "name": "/export [file]",
+      "description": "Export full conversation as text file."
+    },
+    {
+      "part": "I",
+      "section": "Session Management",
+      "name": "/copy [N]",
+      "description": "Copy last (or Nth) response to clipboard."
+    },
+    {
+      "part": "I",
+      "section": "Session Management",
+      "name": "/exit",
+      "description": "Exit Claude Code.",
+      "aliases": [
+        "/quit"
+      ]
+    },
+    {
+      "part": "I",
+      "section": "Context & Information",
+      "name": "/context",
+      "description": "Visual grid showing context window consumption — what's using space and how much remains."
+    },
+    {
+      "part": "I",
+      "section": "Context & Information",
+      "name": "/usage",
+      "description": "Show plan usage and rate limits."
+    },
+    {
+      "part": "I",
+      "section": "Context & Information",
+      "name": "/cost",
+      "description": "Token usage and estimated cost for current session."
+    },
+    {
+      "part": "I",
+      "section": "Context & Information",
+      "name": "/diff",
+      "description": "Interactive diff viewer — uncommitted git changes + Claude's per-turn changes."
+    },
+    {
+      "part": "I",
+      "section": "Context & Information",
+      "name": "/doctor",
+      "description": "Diagnose installation, settings, and environment issues."
+    },
+    {
+      "part": "I",
+      "section": "Context & Information",
+      "name": "/insights",
+      "description": "Analyze session patterns and identify friction points."
+    },
+    {
+      "part": "I",
+      "section": "Context & Information",
+      "name": "/help",
+      "description": "List all available commands including custom ones."
+    },
+    {
+      "part": "I",
+      "section": "Context & Information",
+      "name": "/release-notes",
+      "description": "View full changelog for current version."
+    },
+    {
+      "part": "I",
+      "section": "Context & Information",
+      "name": "/pr-comments [PR]",
+      "description": "Fetch GitHub PR review comments into context."
+    },
+    {
+      "part": "I",
+      "section": "Model & Mode Control",
+      "name": "/model [name]",
+      "description": "Switch model mid-session. Arrow keys adjust effort level in picker."
+    },
+    {
+      "part": "I",
+      "section": "Model & Mode Control",
+      "name": "/effort [level]",
+      "description": "Set reasoning depth: `low` `medium` `high` `max` `auto`. `max` = Opus 4.6 deep think."
+    },
+    {
+      "part": "I",
+      "section": "Model & Mode Control",
+      "name": "/fast [on|off]",
+      "description": "Speed-optimized API settings (same model, faster params). Great for rapid iteration."
+    },
+    {
+      "part": "I",
+      "section": "Model & Mode Control",
+      "name": "/plan [desc]",
+      "description": "Read-only reasoning mode — Claude analyzes and plans without executing changes."
+    },
+    {
+      "part": "I",
+      "section": "Model & Mode Control",
+      "name": "/sandbox",
+      "description": "Toggle sandboxed execution for risky operations."
+    },
+    {
+      "part": "I",
+      "section": "Configuration & Permissions",
+      "name": "/config",
+      "description": "Open settings UI (theme, model prefs, output style).",
+      "aliases": [
+        "/settings"
+      ]
+    },
+    {
+      "part": "I",
+      "section": "Configuration & Permissions",
+      "name": "/permissions",
+      "description": "Manage allow / ask / deny rules at project/global scope.",
+      "aliases": [
+        "/allowed-tools"
+      ]
+    },
+    {
+      "part": "I",
+      "section": "Configuration & Permissions",
+      "name": "/memory",
+      "description": "Edit CLAUDE.md and auto-memory. Claude saves build commands, debugging insights, conventions."
+    },
+    {
+      "part": "I",
+      "section": "Configuration & Permissions",
+      "name": "/init",
+      "description": "Bootstrap project with a CLAUDE.md file for coding standards and context."
+    },
+    {
+      "part": "I",
+      "section": "Configuration & Permissions",
+      "name": "/hooks",
+      "description": "View lifecycle hooks — shell commands that run before/after Claude actions."
+    },
+    {
+      "part": "I",
+      "section": "Configuration & Permissions",
+      "name": "/keybindings",
+      "description": "Open keybinding configuration file."
+    },
+    {
+      "part": "I",
+      "section": "Configuration & Permissions",
+      "name": "/login / /logout",
+      "description": "Sign in or out of Anthropic account."
+    },
+    {
+      "part": "I",
+      "section": "Configuration & Permissions",
+      "name": "/privacy-settings",
+      "description": "Update privacy preferences (Pro/Max plans)."
+    },
+    {
+      "part": "I",
+      "section": "Configuration & Permissions",
+      "name": "/extra-usage",
+      "description": "Configure pay-as-you-go overflow when plan limits hit."
+    },
+    {
+      "part": "I",
+      "section": "Configuration & Permissions",
+      "name": "/color [color]",
+      "description": "Set prompt bar color — visually distinguish parallel sessions."
+    },
+    {
+      "part": "I",
+      "section": "Extensions & Integrations",
+      "name": "/mcp",
+      "description": "Manage MCP server connections. Servers expose tools as `/mcp__<server>__<prompt>` commands."
+    },
+    {
+      "part": "I",
+      "section": "Extensions & Integrations",
+      "name": "/plugin",
+      "description": "Manage plugins — install, remove, discover from marketplaces."
+    },
+    {
+      "part": "I",
+      "section": "Extensions & Integrations",
+      "name": "/reload-plugins",
+      "description": "Hot-reload all active plugins without restarting."
+    },
+    {
+      "part": "I",
+      "section": "Extensions & Integrations",
+      "name": "/agents",
+      "description": "Manage sub-agent configurations."
+    },
+    {
+      "part": "I",
+      "section": "Extensions & Integrations",
+      "name": "/chrome",
+      "description": "Configure browser automation integration."
+    },
+    {
+      "part": "I",
+      "section": "Extensions & Integrations",
+      "name": "/ide",
+      "description": "Manage IDE integrations (VS Code, Cursor, JetBrains)."
+    },
+    {
+      "part": "I",
+      "section": "Extensions & Integrations",
+      "name": "/install-github-app",
+      "description": "Set up Claude GitHub App for PR reviews via GitHub Actions."
+    },
+    {
+      "part": "I",
+      "section": "Extensions & Integrations",
+      "name": "/install-slack-app",
+      "description": "Install Claude for Slack integration."
+    },
+    {
+      "part": "I",
+      "section": "Extensions & Integrations",
+      "name": "/add-dir <path>",
+      "description": "Add an additional working directory for this session."
+    },
+    {
+      "part": "I",
+      "section": "Extensions & Integrations",
+      "name": "/desktop",
+      "description": "Open session in the Desktop app.",
+      "aliases": [
+        "/app"
+      ]
+    },
+    {
+      "part": "I",
+      "section": "Extensions & Integrations",
+      "name": "/remote-control",
+      "description": "Enable remote control from claude.ai.",
+      "aliases": [
+        "/rc"
+      ]
+    },
+    {
+      "part": "I",
+      "section": "Bundled Skills",
+      "name": "/simplify",
+      "description": "3-agent parallel code review. Replaced the older `/review` command."
+    },
+    {
+      "part": "I",
+      "section": "Bundled Skills",
+      "name": "/batch <task>",
+      "description": "Run a task across multiple files simultaneously."
+    },
+    {
+      "part": "I",
+      "section": "Bundled Skills",
+      "name": "/debug",
+      "description": "Structured debugging workflow — reads errors, proposes fixes, tests iteratively."
+    },
+    {
+      "part": "I",
+      "section": "Bundled Skills",
+      "name": "/loop [interval] <prompt>",
+      "description": "Recurring prompt on a schedule. E.g., `/loop 5m check deploy status`. Units: `s m h d`."
+    },
+    {
+      "part": "I",
+      "section": "Bundled Skills",
+      "name": "/schedule [desc]",
+      "description": "Create cloud-hosted scheduled task (persists beyond session)."
+    },
+    {
+      "part": "I",
+      "section": "Bundled Skills",
+      "name": "/security-review",
+      "description": "Scan current branch diff for vulnerabilities (SQLi, XSS, exposed creds)."
+    },
+    {
+      "part": "I",
+      "section": "Bundled Skills",
+      "name": "/btw <question>",
+      "description": "Quick side question — no context cost, keeps main conversation clean."
+    },
+    {
+      "part": "I",
+      "section": "Bundled Skills",
+      "name": "/claude-api",
+      "description": "Quick reference for Anthropic API usage patterns."
+    },
+    {
+      "part": "I",
+      "section": "Multi-Agent & Orchestration",
+      "name": "Agent Teams",
+      "description": "Enable with `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`. Lead agent spawns teammates, coordinates via shared task list."
+    },
+    {
+      "part": "I",
+      "section": "Multi-Agent & Orchestration",
+      "name": "/agents",
+      "description": "View and manage sub-agent configurations. Define in `.claude/agents/`."
+    },
+    {
+      "part": "I",
+      "section": "Multi-Agent & Orchestration",
+      "name": "context: fork",
+      "description": "Skill frontmatter — runs skill in a forked sub-agent to avoid polluting main context."
+    },
+    {
+      "part": "I",
+      "section": "Multi-Agent & Orchestration",
+      "name": "Agent SDK",
+      "description": "`@anthropic-ai/claude-agent-sdk` — Full control over orchestration, tools, and permissions."
+    },
+    {
+      "part": "I",
+      "section": "Multi-Agent & Orchestration",
+      "name": "Builder-Validator",
+      "description": "Pattern: one agent builds, another validates. Exploration → B-V for implementation."
+    },
+    {
+      "part": "I",
+      "section": "Multi-Agent & Orchestration",
+      "name": "Parallel Sessions",
+      "description": "Multiple `claude` instances in different terminals/worktrees for true parallelism."
+    },
+    {
+      "part": "I",
+      "section": "CLI Flags",
+      "name": "claude -p \"prompt\"",
+      "description": "Non-interactive single prompt. Scriptable for CI, cron, and automation."
+    },
+    {
+      "part": "I",
+      "section": "CLI Flags",
+      "name": "--output-format json",
+      "description": "Machine-readable output. Options: `json` `stream-json` `text`"
+    },
+    {
+      "part": "I",
+      "section": "CLI Flags",
+      "name": "--model <name>",
+      "description": "Choose model at launch."
+    },
+    {
+      "part": "I",
+      "section": "CLI Flags",
+      "name": "--dangerously-skip-permissions",
+      "description": "No approval prompts. CI/cron only — scope prompts tightly."
+    },
+    {
+      "part": "I",
+      "section": "CLI Flags",
+      "name": "--allowedTools \"Bash,Read\"",
+      "description": "Pre-approve specific tools. More granular than skip-permissions."
+    },
+    {
+      "part": "I",
+      "section": "CLI Flags",
+      "name": "--permission-mode acceptEdits",
+      "description": "Auto-accept file writes, still prompt for other actions."
+    },
+    {
+      "part": "I",
+      "section": "CLI Flags",
+      "name": "--append-system-prompt",
+      "description": "Add to system prompt (preserves built-ins). Preferred for most use cases."
+    },
+    {
+      "part": "I",
+      "section": "CLI Flags",
+      "name": "--system-prompt-file f.md",
+      "description": "Replace system prompt entirely from a file."
+    },
+    {
+      "part": "I",
+      "section": "CLI Flags",
+      "name": "--continue / --resume <id>",
+      "description": "Resume most recent or specific session by ID."
+    },
+    {
+      "part": "I",
+      "section": "CLI Flags",
+      "name": "--bare",
+      "description": "Skip hooks, skills, MCP, plugins, auto-memory. Clean for CI."
+    },
+    {
+      "part": "I",
+      "section": "CLI Flags",
+      "name": "--json-schema '{...}'",
+      "description": "Enforce structured output schema on response."
+    },
+    {
+      "part": "I",
+      "section": "Keyboard Shortcuts",
+      "name": "Shift + Tab",
+      "description": "Cycle modes: normal → auto-accept → plan. The most-used shortcut."
+    },
+    {
+      "part": "I",
+      "section": "Keyboard Shortcuts",
+      "name": "Ctrl + O",
+      "description": "Toggle verbose / extended thinking output."
+    },
+    {
+      "part": "I",
+      "section": "Keyboard Shortcuts",
+      "name": "Ctrl + R",
+      "description": "Reverse search command history."
+    },
+    {
+      "part": "I",
+      "section": "Keyboard Shortcuts",
+      "name": "Ctrl + F × 2",
+      "description": "Kill all background agents (press twice rapidly)."
+    },
+    {
+      "part": "I",
+      "section": "Keyboard Shortcuts",
+      "name": "Esc",
+      "description": "Cancel current generation or exit menu."
+    },
+    {
+      "part": "I",
+      "section": "Keyboard Shortcuts",
+      "name": "@ file",
+      "description": "Attach file or directory to context inline."
+    },
+    {
+      "part": "I",
+      "section": "Keyboard Shortcuts",
+      "name": "! command",
+      "description": "Run shell command with conversation context. E.g., `! git status`"
+    },
+    {
+      "part": "I",
+      "section": "Keyboard Shortcuts",
+      "name": "/vim",
+      "description": "Enable vim keybindings in the prompt editor."
+    },
+    {
+      "part": "I",
+      "section": "Custom Skills & Commands",
+      "name": "~/.claude/skills/",
+      "description": "Personal skills — available across all projects. Add `SKILL.md` with YAML frontmatter."
+    },
+    {
+      "part": "I",
+      "section": "Custom Skills & Commands",
+      "name": ".claude/skills/",
+      "description": "Project skills — shared via git with your team."
+    },
+    {
+      "part": "I",
+      "section": "Custom Skills & Commands",
+      "name": ".claude/commands/",
+      "description": "Legacy commands — still work. Skills recommended for new commands."
+    },
+    {
+      "part": "I",
+      "section": "Custom Skills & Commands",
+      "name": "allowed-tools",
+      "description": "Frontmatter: grant tool access without per-use approval. E.g., `Bash(git add:*)`"
+    },
+    {
+      "part": "I",
+      "section": "Custom Skills & Commands",
+      "name": "model: haiku",
+      "description": "Frontmatter: override model per skill. Use `haiku` for cheap repetitive tasks."
+    },
+    {
+      "part": "I",
+      "section": "Custom Skills & Commands",
+      "name": "context: fork",
+      "description": "Frontmatter: run in a sub-agent so it doesn't pollute main context."
+    },
+    {
+      "part": "I",
+      "section": "Custom Skills & Commands",
+      "name": "$ARGUMENTS",
+      "description": "Capture args passed after the command. `/fix-issue 123 high` → `\"123 high\"`"
+    },
+    {
+      "part": "I",
+      "section": "Custom Skills & Commands",
+      "name": "disable-model-invocation",
+      "description": "Frontmatter: prevent auto-invocation. Explicit `/command` only."
+    },
+    {
+      "part": "II",
+      "section_num": "I",
+      "section": "Workflow Orchestration",
+      "name": "Decompose",
+      "description": "Split a complex goal into granular, executable steps with clear dependencies."
+    },
+    {
+      "part": "II",
+      "section_num": "I",
+      "section": "Workflow Orchestration",
+      "name": "Route",
+      "description": "Assign tasks to specialized sub-agents based on capability matching."
+    },
+    {
+      "part": "II",
+      "section_num": "I",
+      "section": "Workflow Orchestration",
+      "name": "Parallelize",
+      "description": "Run non-dependent tasks simultaneously to compress wall-clock time."
+    },
+    {
+      "part": "II",
+      "section_num": "I",
+      "section": "Workflow Orchestration",
+      "name": "Handoff",
+      "description": "Transfer full context between agents or back to a human operator."
+    },
+    {
+      "part": "II",
+      "section_num": "I",
+      "section": "Workflow Orchestration",
+      "name": "Synchronize",
+      "description": "Ensure all agents are working off the latest data version before proceeding."
+    },
+    {
+      "part": "II",
+      "section_num": "I",
+      "section": "Workflow Orchestration",
+      "name": "Replan",
+      "description": "Revise the task graph mid-execution when assumptions break or new info emerges."
+    },
+    {
+      "part": "II",
+      "section_num": "I",
+      "section": "Workflow Orchestration",
+      "name": "Checkpoint",
+      "description": "Save full state at a known-good point so you can roll back if a path fails."
+    },
+    {
+      "part": "II",
+      "section_num": "I",
+      "section": "Workflow Orchestration",
+      "name": "Backtrack",
+      "description": "Abandon a failing path and revert to the last checkpoint to try an alternative approach."
+    },
+    {
+      "part": "II",
+      "section_num": "II",
+      "section": "Cognitive & Reasoning Commands",
+      "name": "Chain-of-Thought",
+      "description": "Document every logical step taken. Makes reasoning auditable and debuggable."
+    },
+    {
+      "part": "II",
+      "section_num": "II",
+      "section": "Cognitive & Reasoning Commands",
+      "name": "ReAct Loop",
+      "description": "Iteratively Think → Act → Observe. The core agent execution cycle."
+    },
+    {
+      "part": "II",
+      "section_num": "II",
+      "section": "Cognitive & Reasoning Commands",
+      "name": "Step-Back",
+      "description": "Identify core principles before specific execution. \"What problem am I actually solving?\""
+    },
+    {
+      "part": "II",
+      "section_num": "II",
+      "section": "Cognitive & Reasoning Commands",
+      "name": "Self-Consistency",
+      "description": "Generate multiple solutions via different reasoning paths and pick the most common/best one."
+    },
+    {
+      "part": "II",
+      "section_num": "II",
+      "section": "Cognitive & Reasoning Commands",
+      "name": "Reflect",
+      "description": "Critically analyze the previous output for errors, gaps, or unstated assumptions."
+    },
+    {
+      "part": "II",
+      "section_num": "III",
+      "section": "Quality Assurance & Remediation",
+      "name": "Audit",
+      "description": "Verify output against strict compliance, security, or data rules."
+    },
+    {
+      "part": "II",
+      "section_num": "III",
+      "section": "Quality Assurance & Remediation",
+      "name": "Validate",
+      "description": "Fact-check against a \"Ground Truth\" source — docs, tests, schema, or API response."
+    },
+    {
+      "part": "II",
+      "section_num": "III",
+      "section": "Quality Assurance & Remediation",
+      "name": "Refactor",
+      "description": "Rewrite logic for better performance or clarity — not just patching symptoms."
+    },
+    {
+      "part": "II",
+      "section_num": "III",
+      "section": "Quality Assurance & Remediation",
+      "name": "Stress-Test",
+      "description": "Find the breaking point of a plan, code path, or architecture under edge cases."
+    },
+    {
+      "part": "II",
+      "section_num": "III",
+      "section": "Quality Assurance & Remediation",
+      "name": "Remediate",
+      "description": "Address the root cause of an identified bug, not just the surface error."
+    },
+    {
+      "part": "II",
+      "section_num": "IV",
+      "section": "Memory & Information Flow",
+      "name": "Ground",
+      "description": "Restrict responses to provided reference materials only — no hallucination allowed."
+    },
+    {
+      "part": "II",
+      "section_num": "IV",
+      "section": "Memory & Information Flow",
+      "name": "Synthesize",
+      "description": "Create a \"State of the Project\" summary from raw, scattered data sources."
+    },
+    {
+      "part": "II",
+      "section_num": "IV",
+      "section": "Memory & Information Flow",
+      "name": "Prune",
+      "description": "Clear outdated context to focus the agent's attention on what's current."
+    },
+    {
+      "part": "II",
+      "section_num": "IV",
+      "section": "Memory & Information Flow",
+      "name": "Commit",
+      "description": "Store key results in long-term persistent memory for future sessions."
+    },
+    {
+      "part": "II",
+      "section_num": "IV",
+      "section": "Memory & Information Flow",
+      "name": "Retrieve",
+      "description": "RAG-style lookup from a knowledge base, vector store, or document corpus."
+    },
+    {
+      "part": "II",
+      "section_num": "IV",
+      "section": "Memory & Information Flow",
+      "name": "Search",
+      "description": "Web or codebase search to fill knowledge gaps the agent can't answer from memory."
+    },
+    {
+      "part": "II",
+      "section_num": "IV",
+      "section": "Memory & Information Flow",
+      "name": "Inspect",
+      "description": "Read the current state of the environment — filesystem, database, API response, logs."
+    },
+    {
+      "part": "II",
+      "section_num": "IV",
+      "section": "Memory & Information Flow",
+      "name": "Attach",
+      "description": "Pull specific artifacts (files, docs, images) into the working context on demand."
+    },
+    {
+      "part": "II",
+      "section_num": "V",
+      "section": "Tool Use & Environment Interaction",
+      "name": "Invoke",
+      "description": "Call an external tool, API, or function and parse the structured result."
+    },
+    {
+      "part": "II",
+      "section_num": "V",
+      "section": "Tool Use & Environment Interaction",
+      "name": "Observe",
+      "description": "Read the environment state after an action — the \"O\" in ReAct, independently named."
+    },
+    {
+      "part": "II",
+      "section_num": "V",
+      "section": "Tool Use & Environment Interaction",
+      "name": "Sandbox",
+      "description": "Execute code or commands in an isolated environment to prevent unintended side effects."
+    },
+    {
+      "part": "II",
+      "section_num": "V",
+      "section": "Tool Use & Environment Interaction",
+      "name": "Escalate",
+      "description": "Recognize when a task exceeds the agent's capability and surface it to a human or higher-privilege system."
+    },
+    {
+      "part": "II",
+      "section_num": "V",
+      "section": "Tool Use & Environment Interaction",
+      "name": "Transform",
+      "description": "Convert data between formats (JSON→XML, CSV→SQL, Mermaid→image) as an intermediate step."
+    },
+    {
+      "part": "II",
+      "section_num": "V",
+      "section": "Tool Use & Environment Interaction",
+      "name": "Retry",
+      "description": "Re-execute a failed tool call with adjusted parameters or after a backoff delay."
+    },
+    {
+      "part": "II",
+      "section_num": "VI",
+      "section": "Guard Rails & Control Flow",
+      "name": "Constrain",
+      "description": "Enforce boundaries on what the agent is allowed to do — tool permissions, token budgets, scope limits."
+    },
+    {
+      "part": "II",
+      "section_num": "VI",
+      "section": "Guard Rails & Control Flow",
+      "name": "Gate",
+      "description": "Require explicit human approval before irreversible or high-risk actions."
+    },
+    {
+      "part": "II",
+      "section_num": "VI",
+      "section": "Guard Rails & Control Flow",
+      "name": "Abort",
+      "description": "Hard-stop execution when a safety threshold, cost limit, or error budget is breached."
+    },
+    {
+      "part": "II",
+      "section_num": "VI",
+      "section": "Guard Rails & Control Flow",
+      "name": "Throttle",
+      "description": "Rate-limit agent actions to prevent runaway loops, API exhaustion, or cost overruns."
+    },
+    {
+      "part": "II",
+      "section_num": "VI",
+      "section": "Guard Rails & Control Flow",
+      "name": "Scope",
+      "description": "Restrict the agent's view to only the files, data, or systems relevant to the current task."
+    },
+    {
+      "part": "II",
+      "section_num": "VI",
+      "section": "Guard Rails & Control Flow",
+      "name": "Fence",
+      "description": "Define explicit \"never do this\" rules — immutable constraints the agent cannot override."
+    },
+    {
+      "part": "II",
+      "section_num": "VII",
+      "section": "Output & Delivery",
+      "name": "Emit",
+      "description": "Produce a structured output artifact — JSON, file, diff, commit, PR, or API response."
+    },
+    {
+      "part": "II",
+      "section_num": "VII",
+      "section": "Output & Delivery",
+      "name": "Summarize",
+      "description": "Compress a long working session into a concise deliverable for the human."
+    },
+    {
+      "part": "II",
+      "section_num": "VII",
+      "section": "Output & Delivery",
+      "name": "Present",
+      "description": "Format and deliver results in context-appropriate form — diff, report, Slack message, dashboard."
+    },
+    {
+      "part": "II",
+      "section_num": "VII",
+      "section": "Output & Delivery",
+      "name": "Narrate",
+      "description": "Provide a running explanation of what the agent is doing and why — builds trust and debuggability."
+    },
+    {
+      "part": "II",
+      "section_num": "VII",
+      "section": "Output & Delivery",
+      "name": "Log",
+      "description": "Record actions, decisions, and outcomes for later audit without cluttering the main output."
+    },
+    {
+      "part": "II",
+      "section_num": "VIII",
+      "section": "Collaboration & Multi-Agent",
+      "name": "Delegate",
+      "description": "Assign a scoped sub-task to a sub-agent with its own context fork. Distinct from Route (which chooses the agent)."
+    },
+    {
+      "part": "II",
+      "section_num": "VIII",
+      "section": "Collaboration & Multi-Agent",
+      "name": "Merge",
+      "description": "Combine outputs from parallel agents into a single coherent result."
+    },
+    {
+      "part": "II",
+      "section_num": "VIII",
+      "section": "Collaboration & Multi-Agent",
+      "name": "Negotiate",
+      "description": "Agents resolve conflicting outputs or approaches through structured debate."
+    },
+    {
+      "part": "II",
+      "section_num": "VIII",
+      "section": "Collaboration & Multi-Agent",
+      "name": "Vote",
+      "description": "Ensemble pattern — multiple agents weigh in and the majority/best answer wins."
+    },
+    {
+      "part": "II",
+      "section_num": "VIII",
+      "section": "Collaboration & Multi-Agent",
+      "name": "Supervise",
+      "description": "A lead agent monitors sub-agents, intervening only when they stall, conflict, or exceed bounds."
+    },
+    {
+      "part": "II",
+      "section_num": "VIII",
+      "section": "Collaboration & Multi-Agent",
+      "name": "Broadcast",
+      "description": "Push a state update, constraint change, or new context to all active agents simultaneously."
+    },
+    {
+      "part": "II",
+      "section_num": "IX",
+      "section": "Foreman / Supervisor Orchestration",
+      "subsection": "A. Plan Management",
+      "name": "Spec",
+      "description": "Define acceptance criteria, constraints, and deliverables before any work begins. The contract between the human and the foreman."
+    },
+    {
+      "part": "II",
+      "section_num": "IX",
+      "section": "Foreman / Supervisor Orchestration",
+      "subsection": "A. Plan Management",
+      "name": "Sequence",
+      "description": "Order tasks by dependency graph — what blocks what — not just priority. Produces a DAG (directed acyclic graph) of execution."
+    },
+    {
+      "part": "II",
+      "section_num": "IX",
+      "section": "Foreman / Supervisor Orchestration",
+      "subsection": "A. Plan Management",
+      "name": "Estimate",
+      "description": "Size each task (time, tokens, complexity) so the foreman knows when something is running long and needs intervention."
+    },
+    {
+      "part": "II",
+      "section_num": "IX",
+      "section": "Foreman / Supervisor Orchestration",
+      "subsection": "A. Plan Management",
+      "name": "Assign",
+      "description": "Match a task to the best-fit agent based on capability, current load, and context proximity."
+    },
+    {
+      "part": "II",
+      "section_num": "IX",
+      "section": "Foreman / Supervisor Orchestration",
+      "subsection": "A. Plan Management",
+      "name": "Rebalance",
+      "description": "Redistribute work across agents when one finishes early, another gets stuck, or a new dependency emerges."
+    },
+    {
+      "part": "II",
+      "section_num": "IX",
+      "section": "Foreman / Supervisor Orchestration",
+      "subsection": "A. Plan Management",
+      "name": "Phase",
+      "description": "Group tasks into ordered stages (e.g., scaffold → implement → test → integrate). The next phase doesn't start until the current one passes its gate."
+    },
+    {
+      "part": "II",
+      "section_num": "IX",
+      "section": "Foreman / Supervisor Orchestration",
+      "subsection": "B. Task Board & State Tracking",
+      "name": "Track",
+      "description": "Maintain a persistent task board with lifecycle states: `queued → assigned → in-progress → review → done → blocked`."
+    },
+    {
+      "part": "II",
+      "section_num": "IX",
+      "section": "Foreman / Supervisor Orchestration",
+      "subsection": "B. Task Board & State Tracking",
+      "name": "Poll",
+      "description": "Periodically check agent status rather than waiting for callbacks. Detects silent failures and stalls."
+    },
+    {
+      "part": "II",
+      "section_num": "IX",
+      "section": "Foreman / Supervisor Orchestration",
+      "subsection": "B. Task Board & State Tracking",
+      "name": "Unblock",
+      "description": "Detect and resolve blockers — reassign the task, provide missing context, or escalate to the human."
+    },
+    {
+      "part": "II",
+      "section_num": "IX",
+      "section": "Foreman / Supervisor Orchestration",
+      "subsection": "B. Task Board & State Tracking",
+      "name": "Promote",
+      "description": "Move a task through its lifecycle gates after validation passes (e.g., in-progress → review after tests pass)."
+    },
+    {
+      "part": "II",
+      "section_num": "IX",
+      "section": "Foreman / Supervisor Orchestration",
+      "subsection": "B. Task Board & State Tracking",
+      "name": "Flag",
+      "description": "Mark a task or agent output as needing human attention without halting the entire pipeline."
+    },
+    {
+      "part": "II",
+      "section_num": "IX",
+      "section": "Foreman / Supervisor Orchestration",
+      "subsection": "B. Task Board & State Tracking",
+      "name": "Deprioritize",
+      "description": "Push a non-critical blocked task to the back of the queue so other work continues flowing."
+    },
+    {
+      "part": "II",
+      "section_num": "IX",
+      "section": "Foreman / Supervisor Orchestration",
+      "subsection": "C. Agent Lifecycle",
+      "name": "Spawn",
+      "description": "Create a new agent with scoped context, tool permissions, and a specific task assignment."
+    },
+    {
+      "part": "II",
+      "section_num": "IX",
+      "section": "Foreman / Supervisor Orchestration",
+      "subsection": "C. Agent Lifecycle",
+      "name": "Heartbeat",
+      "description": "Verify an agent is still alive and making progress — not spinning, looping, or silently failing."
+    },
+    {
+      "part": "II",
+      "section_num": "IX",
+      "section": "Foreman / Supervisor Orchestration",
+      "subsection": "C. Agent Lifecycle",
+      "name": "Reassign",
+      "description": "Take work from a stalled or failing agent and give it to another (with context transfer)."
+    },
+    {
+      "part": "II",
+      "section_num": "IX",
+      "section": "Foreman / Supervisor Orchestration",
+      "subsection": "C. Agent Lifecycle",
+      "name": "Retire",
+      "description": "Clean up an agent when its work is done — reclaim context budget, save outputs, update the board."
+    },
+    {
+      "part": "II",
+      "section_num": "IX",
+      "section": "Foreman / Supervisor Orchestration",
+      "subsection": "C. Agent Lifecycle",
+      "name": "Quarantine",
+      "description": "Isolate an agent producing bad outputs so its work doesn't contaminate other agents' context."
+    },
+    {
+      "part": "II",
+      "section_num": "IX",
+      "section": "Foreman / Supervisor Orchestration",
+      "subsection": "D. Completion & Convergence",
+      "name": "Converge",
+      "description": "All parallel streams merge back to a single coherent state — code, docs, configs unified."
+    },
+    {
+      "part": "II",
+      "section_num": "IX",
+      "section": "Foreman / Supervisor Orchestration",
+      "subsection": "D. Completion & Convergence",
+      "name": "Reconcile",
+      "description": "Resolve conflicts between agents that modified overlapping files, APIs, or shared state."
+    },
+    {
+      "part": "II",
+      "section_num": "IX",
+      "section": "Foreman / Supervisor Orchestration",
+      "subsection": "D. Completion & Convergence",
+      "name": "Accept",
+      "description": "The foreman validates that acceptance criteria from the Spec are met. Binary: pass or fail."
+    },
+    {
+      "part": "II",
+      "section_num": "IX",
+      "section": "Foreman / Supervisor Orchestration",
+      "subsection": "D. Completion & Convergence",
+      "name": "Integrate",
+      "description": "Run integration tests, lint, type-check — verify that individually-correct pieces work together."
+    },
+    {
+      "part": "II",
+      "section_num": "IX",
+      "section": "Foreman / Supervisor Orchestration",
+      "subsection": "D. Completion & Convergence",
+      "name": "Ship",
+      "description": "Final assembly — combine all outputs, produce the deliverable (PR, artifact, deployment), close the board."
+    },
+    {
+      "part": "II",
+      "section_num": "IX",
+      "section": "Foreman / Supervisor Orchestration",
+      "subsection": "D. Completion & Convergence",
+      "name": "Retrospect",
+      "description": "Post-completion analysis: what worked, what stalled, which estimates were off. Feed learnings back into memory for next time."
+    },
+    {
+      "part": "II",
+      "section": "Mapping Foreman Commands to Claude Code",
+      "name": "Spec",
+      "description": "Write acceptance criteria in CLAUDE.md or a `spec.md` file the foreman references."
+    },
+    {
+      "part": "II",
+      "section": "Mapping Foreman Commands to Claude Code",
+      "name": "Sequence / Phase",
+      "description": "Encode the DAG as a checklist or task list in a markdown file the foreman maintains."
+    },
+    {
+      "part": "II",
+      "section": "Mapping Foreman Commands to Claude Code",
+      "name": "Spawn",
+      "description": "Agent Teams auto-spawns, or manual parallel `claude` sessions in separate worktrees."
+    },
+    {
+      "part": "II",
+      "section": "Mapping Foreman Commands to Claude Code",
+      "name": "Track",
+      "description": "Foreman maintains a `BOARD.md` or structured JSON file, updating after each Poll cycle."
+    },
+    {
+      "part": "II",
+      "section": "Mapping Foreman Commands to Claude Code",
+      "name": "Poll / Heartbeat",
+      "description": "`/loop` with a status-check prompt, or the foreman's own ReAct loop reading agent output files."
+    },
+    {
+      "part": "II",
+      "section": "Mapping Foreman Commands to Claude Code",
+      "name": "Assign / Reassign",
+      "description": "Agent Teams handles this via the shared task list. Manual: write task to agent's input file."
+    },
+    {
+      "part": "II",
+      "section": "Mapping Foreman Commands to Claude Code",
+      "name": "Reconcile",
+      "description": "`git merge` + foreman reviews conflicts, or foreman runs `/diff` across branches."
+    },
+    {
+      "part": "II",
+      "section": "Mapping Foreman Commands to Claude Code",
+      "name": "Accept",
+      "description": "Foreman runs the test suite and compares output against the Spec's acceptance criteria."
+    },
+    {
+      "part": "II",
+      "section": "Mapping Foreman Commands to Claude Code",
+      "name": "Ship",
+      "description": "Custom `/ship` skill: run tests → commit → push → open PR."
+    },
+    {
+      "part": "II",
+      "section": "Mapping Foreman Commands to Claude Code",
+      "name": "Retrospect",
+      "description": "`/compact` the session with a focus on \"what worked and what didn't\" → `/memory` to persist."
+    }
+  ]
+}
