@@ -233,6 +233,21 @@
   .s-collaboration .section-icon { background: var(--fuchsia-dim); color: var(--fuchsia); }
   .s-collaboration .cmd-name { color: var(--fuchsia); }
 
+  .s-foreman .section-icon { background: linear-gradient(135deg, var(--amber-dim), var(--orange-dim)); color: var(--amber); }
+  .s-foreman .cmd-name { color: var(--amber); }
+  .s-foreman .section-header { border-bottom: 1px solid rgba(251,191,36,0.2); }
+
+  .subsection-label {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--amber);
+    padding: 0.75rem 0.75rem 0.25rem;
+    opacity: 0.7;
+  }
+
   .tip {
     margin-top: 0.6rem; padding: 0.55rem 0.85rem;
     border-radius: 5px; font-size: 0.78rem; line-height: 1.55; border-left: 3px solid;
@@ -312,6 +327,7 @@
     <button class="filter-btn part-ii-btn" data-filter="guardrails">Guards</button>
     <button class="filter-btn part-ii-btn" data-filter="output">Output</button>
     <button class="filter-btn part-ii-btn" data-filter="collaboration">Collab</button>
+    <button class="filter-btn part-ii-btn" data-filter="foreman">Foreman</button>
   </div>
 </div>
 
@@ -677,6 +693,117 @@
     <div class="cmd-row"><div class="cmd-name">Broadcast</div><div class="cmd-desc">Push a state update, constraint change, or new context to all active agents simultaneously.</div></div>
   </div>
   <div class="tip tip-fuchsia">💡 In Claude Code: Agent Teams = Supervise + Delegate + Merge. <code>/simplify</code> = Vote (3 reviewers). <code>context: fork</code> = Delegate.</div>
+</div>
+
+<!-- IX. FOREMAN / SUPERVISOR ORCHESTRATION -->
+<div class="section s-foreman" data-cat="foreman">
+  <div class="section-header">
+    <div class="section-icon">👷</div>
+    <div class="section-num">IX.</div>
+    <div class="section-title">Foreman / Supervisor Orchestration</div>
+    <div class="section-subtitle">The lead agent that owns the project</div>
+  </div>
+
+  <div class="subsection-label">A. Plan Management</div>
+  <div class="cmd-grid">
+    <div class="cmd-row"><div class="cmd-name">Spec</div><div class="cmd-desc">Define acceptance criteria, constraints, and deliverables before any work begins. The contract between human and foreman.</div></div>
+    <div class="cmd-row"><div class="cmd-name">Sequence</div><div class="cmd-desc">Order tasks by dependency graph — what blocks what — not just priority. Produces a DAG of execution.</div></div>
+    <div class="cmd-row"><div class="cmd-name">Estimate</div><div class="cmd-desc">Size each task (time, tokens, complexity) so the foreman knows when something is running long.</div></div>
+    <div class="cmd-row"><div class="cmd-name">Assign</div><div class="cmd-desc">Match a task to the best-fit agent based on capability, current load, and context proximity.</div></div>
+    <div class="cmd-row"><div class="cmd-name">Rebalance</div><div class="cmd-desc">Redistribute work when one agent finishes early, another gets stuck, or a new dependency emerges.</div></div>
+    <div class="cmd-row"><div class="cmd-name">Phase</div><div class="cmd-desc">Group tasks into ordered stages (scaffold → implement → test → integrate). Next phase waits for current gate.</div></div>
+  </div>
+  <div class="tip tip-amber">💡 Spec is the most underused command. Without acceptance criteria, the foreman has no way to know when "done" is done — it just keeps iterating.</div>
+
+  <div class="subsection-label">B. Task Board & State Tracking</div>
+  <div class="cmd-grid">
+    <div class="cmd-row"><div class="cmd-name">Track</div><div class="cmd-desc">Maintain a persistent task board with states: <code>queued → assigned → in-progress → review → done → blocked</code></div></div>
+    <div class="cmd-row"><div class="cmd-name">Poll</div><div class="cmd-desc">Periodically check agent status rather than waiting for callbacks. Detects silent failures and stalls.</div></div>
+    <div class="cmd-row"><div class="cmd-name">Unblock</div><div class="cmd-desc">Detect and resolve blockers — reassign the task, provide missing context, or escalate to the human.</div></div>
+    <div class="cmd-row"><div class="cmd-name">Promote</div><div class="cmd-desc">Move a task through its lifecycle gates after validation passes (e.g., in-progress → review after tests pass).</div></div>
+    <div class="cmd-row"><div class="cmd-name">Flag</div><div class="cmd-desc">Mark a task or agent output as needing human attention without halting the entire pipeline.</div></div>
+    <div class="cmd-row"><div class="cmd-name">Deprioritize</div><div class="cmd-desc">Push a non-critical blocked task to the back of the queue so other work continues flowing.</div></div>
+  </div>
+  <div class="tip tip-amber">💡 The foreman should Poll on a cadence, not just react. A stuck agent won't always tell you it's stuck — you have to ask.</div>
+
+  <div class="subsection-label">C. Agent Lifecycle</div>
+  <div class="cmd-grid">
+    <div class="cmd-row"><div class="cmd-name">Spawn</div><div class="cmd-desc">Create a new agent with scoped context, tool permissions, and a specific task assignment.</div></div>
+    <div class="cmd-row"><div class="cmd-name">Heartbeat</div><div class="cmd-desc">Verify an agent is still alive and making progress — not spinning, looping, or silently failing.</div></div>
+    <div class="cmd-row"><div class="cmd-name">Reassign</div><div class="cmd-desc">Take work from a stalled or failing agent and give it to another (with context transfer).</div></div>
+    <div class="cmd-row"><div class="cmd-name">Retire</div><div class="cmd-desc">Clean up an agent when its work is done — reclaim context budget, save outputs, update the board.</div></div>
+    <div class="cmd-row"><div class="cmd-name">Quarantine</div><div class="cmd-desc">Isolate an agent producing bad outputs so its work doesn't contaminate other agents' context.</div></div>
+  </div>
+  <div class="tip tip-amber">💡 In Claude Code: <code>Ctrl+F×2</code> = manual Quarantine/Abort. Agent Teams handles Spawn/Retire. <code>/loop</code> approximates Heartbeat.</div>
+
+  <div class="subsection-label">D. Completion & Convergence</div>
+  <div class="cmd-grid">
+    <div class="cmd-row"><div class="cmd-name">Converge</div><div class="cmd-desc">All parallel streams merge back to a single coherent state — code, docs, configs unified.</div></div>
+    <div class="cmd-row"><div class="cmd-name">Reconcile</div><div class="cmd-desc">Resolve conflicts between agents that modified overlapping files, APIs, or shared state.</div></div>
+    <div class="cmd-row"><div class="cmd-name">Accept</div><div class="cmd-desc">Foreman validates that acceptance criteria from the Spec are met. Binary: pass or fail.</div></div>
+    <div class="cmd-row"><div class="cmd-name">Integrate</div><div class="cmd-desc">Run integration tests, lint, type-check — verify individually-correct pieces work together.</div></div>
+    <div class="cmd-row"><div class="cmd-name">Ship</div><div class="cmd-desc">Final assembly — combine outputs, produce the deliverable (PR, artifact, deployment), close the board.</div></div>
+    <div class="cmd-row"><div class="cmd-name">Retrospect</div><div class="cmd-desc">Post-completion analysis: what worked, what stalled, which estimates were off. Feed learnings into memory.</div></div>
+  </div>
+  <div class="tip tip-amber">💡 Converge without Reconcile = merge conflicts at the end. The foreman should Reconcile incrementally, not in one big bang.</div>
+</div>
+
+<!-- X. FOREMAN EXECUTION LIFECYCLE -->
+<div class="section s-foreman" data-cat="foreman">
+  <div class="section-header">
+    <div class="section-icon">🔄</div>
+    <div class="section-num">X.</div>
+    <div class="section-title">Foreman Execution Lifecycle</div>
+    <div class="section-subtitle">The meta-loop from plan to ship</div>
+  </div>
+  <div style="padding: 0.75rem; background: var(--surface); border-radius: 6px; border: 1px solid var(--border); font-family: var(--mono); font-size: 0.72rem; line-height: 1.7; color: var(--text-dim); overflow-x: auto; white-space: pre;">
+<span style="color:var(--amber);font-weight:700;">1. PLAN</span>
+   Spec → Decompose → Sequence → Estimate → Phase
+
+<span style="color:var(--amber);font-weight:700;">2. MOBILIZE</span>
+   Spawn agents → Assign tasks → Broadcast context
+   Track (initialize board)
+
+<span style="color:var(--amber);font-weight:700;">3. EXECUTE</span> <span style="color:var(--text-dim);font-style:italic;">(loop until all phases complete)</span>
+   ┌────────────────────────────────────────────┐
+   │  Poll all agents (Heartbeat)               │
+   │  ├─ Agent done?                            │
+   │  │   → Validate → Promote → Retire         │
+   │  │   → Assign next task or Rebalance       │
+   │  ├─ Agent stuck?                           │
+   │  │   → Unblock or Reassign                 │
+   │  ├─ Agent failing?                         │
+   │  │   → Quarantine → Spawn replacement      │
+   │  ├─ Assumptions broken?                    │
+   │  │   → Replan → Rebalance → Broadcast      │
+   │  ├─ Conflict detected?                     │
+   │  │   → Reconcile or Negotiate              │
+   │  └─ All clear?                             │
+   │      → Continue (next Poll cycle)          │
+   └────────────────────────────────────────────┘
+
+<span style="color:var(--amber);font-weight:700;">4. CONVERGE</span>
+   Merge all outputs → Reconcile conflicts
+   Integrate (full test suite)
+
+<span style="color:var(--amber);font-weight:700;">5. ACCEPT</span>
+   Validate against Spec acceptance criteria
+   ├─ Pass → Ship → Retrospect → Done
+   └─ Fail → Flag gaps → loop back to EXECUTE</div>
+  <div class="tip tip-amber" style="margin-top: 0.75rem;">💡 The foreman never does the work itself. It Specs, Tracks, Polls, Unblocks, Reconciles, and Accepts. The agents build. The human sets the goal and reviews the Ship.</div>
+
+  <div class="subsection-label" style="margin-top: 1rem;">Mapping to Claude Code</div>
+  <div class="cmd-grid">
+    <div class="cmd-row"><div class="cmd-name">Spec</div><div class="cmd-desc">Write acceptance criteria in CLAUDE.md or a <code>spec.md</code> the foreman references.</div></div>
+    <div class="cmd-row"><div class="cmd-name">Sequence / Phase</div><div class="cmd-desc">Encode the DAG as a checklist or task list in a markdown file the foreman maintains.</div></div>
+    <div class="cmd-row"><div class="cmd-name">Spawn</div><div class="cmd-desc">Agent Teams auto-spawns, or manual parallel <code>claude</code> sessions in separate worktrees.</div></div>
+    <div class="cmd-row"><div class="cmd-name">Track</div><div class="cmd-desc">Foreman maintains a <code>BOARD.md</code> or structured JSON file, updating after each Poll cycle.</div></div>
+    <div class="cmd-row"><div class="cmd-name">Poll / Heartbeat</div><div class="cmd-desc"><code>/loop</code> with a status-check prompt, or foreman's ReAct loop reading agent output files.</div></div>
+    <div class="cmd-row"><div class="cmd-name">Reconcile</div><div class="cmd-desc"><code>git merge</code> + foreman reviews conflicts, or foreman runs <code>/diff</code> across branches.</div></div>
+    <div class="cmd-row"><div class="cmd-name">Accept</div><div class="cmd-desc">Foreman runs the test suite and compares output against the Spec's acceptance criteria.</div></div>
+    <div class="cmd-row"><div class="cmd-name">Ship</div><div class="cmd-desc">Custom <code>/ship</code> skill: run tests → commit → push → open PR.</div></div>
+    <div class="cmd-row"><div class="cmd-name">Retrospect</div><div class="cmd-desc"><code>/compact</code> focused on "what worked" → <code>/memory</code> to persist learnings for next time.</div></div>
+  </div>
 </div>
 
 <footer>

@@ -344,5 +344,133 @@ Universal patterns for any agentic system
 
 ---
 
+### IX. Foreman / Supervisor Orchestration
+
+*The lead agent that owns the entire project from plan through completion*
+
+#### A. Plan Management
+
+| Command | Description |
+|---|---|
+| **Spec** | Define acceptance criteria, constraints, and deliverables before any work begins. The contract between the human and the foreman. |
+| **Sequence** | Order tasks by dependency graph — what blocks what — not just priority. Produces a DAG (directed acyclic graph) of execution. |
+| **Estimate** | Size each task (time, tokens, complexity) so the foreman knows when something is running long and needs intervention. |
+| **Assign** | Match a task to the best-fit agent based on capability, current load, and context proximity. |
+| **Rebalance** | Redistribute work across agents when one finishes early, another gets stuck, or a new dependency emerges. |
+| **Phase** | Group tasks into ordered stages (e.g., scaffold → implement → test → integrate). The next phase doesn't start until the current one passes its gate. |
+
+> 💡 Spec is the most underused command. Without explicit acceptance criteria, the foreman has no way to know when "done" is actually done — it just keeps iterating.
+
+#### B. Task Board & State Tracking
+
+| Command | Description |
+|---|---|
+| **Track** | Maintain a persistent task board with lifecycle states: `queued → assigned → in-progress → review → done → blocked`. |
+| **Poll** | Periodically check agent status rather than waiting for callbacks. Detects silent failures and stalls. |
+| **Unblock** | Detect and resolve blockers — reassign the task, provide missing context, or escalate to the human. |
+| **Promote** | Move a task through its lifecycle gates after validation passes (e.g., in-progress → review after tests pass). |
+| **Flag** | Mark a task or agent output as needing human attention without halting the entire pipeline. |
+| **Deprioritize** | Push a non-critical blocked task to the back of the queue so other work continues flowing. |
+
+> 💡 The foreman should Poll on a cadence, not just react to events. A stuck agent won't always tell you it's stuck — you have to ask.
+
+#### C. Agent Lifecycle
+
+| Command | Description |
+|---|---|
+| **Spawn** | Create a new agent with scoped context, tool permissions, and a specific task assignment. |
+| **Heartbeat** | Verify an agent is still alive and making progress — not spinning, looping, or silently failing. |
+| **Reassign** | Take work from a stalled or failing agent and give it to another (with context transfer). |
+| **Retire** | Clean up an agent when its work is done — reclaim context budget, save outputs, update the board. |
+| **Quarantine** | Isolate an agent producing bad outputs so its work doesn't contaminate other agents' context. |
+
+> 💡 In Claude Code: `Ctrl+F×2` is a manual Quarantine/Abort. Agent Teams handles Spawn and Retire automatically. Heartbeat is what `/loop` can approximate.
+
+#### D. Completion & Convergence
+
+| Command | Description |
+|---|---|
+| **Converge** | All parallel streams merge back to a single coherent state — code, docs, configs unified. |
+| **Reconcile** | Resolve conflicts between agents that modified overlapping files, APIs, or shared state. |
+| **Accept** | The foreman validates that acceptance criteria from the Spec are met. Binary: pass or fail. |
+| **Integrate** | Run integration tests, lint, type-check — verify that individually-correct pieces work together. |
+| **Ship** | Final assembly — combine all outputs, produce the deliverable (PR, artifact, deployment), close the board. |
+| **Retrospect** | Post-completion analysis: what worked, what stalled, which estimates were off. Feed learnings back into memory for next time. |
+
+> 💡 Converge without Reconcile is how you get merge conflicts at the end of a multi-agent build. The foreman should Reconcile incrementally, not in one big bang at the end.
+
+---
+
+### X. Foreman Execution Lifecycle
+
+*The meta-loop that ties it all together*
+
+This is the operational sequence a foreman agent follows from start to finish. Each step maps back to commands from the glossary.
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    FOREMAN LIFECYCLE                         │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│  1. PLAN                                                    │
+│     Spec → Decompose → Sequence → Estimate → Phase          │
+│                                                             │
+│  2. MOBILIZE                                                │
+│     Spawn agents → Assign tasks → Broadcast context          │
+│     Track (initialize board)                                │
+│                                                             │
+│  3. EXECUTE (loop until all phases complete)                │
+│     ┌──────────────────────────────────────────┐            │
+│     │  Poll all agents (Heartbeat)             │            │
+│     │  ├─ Agent done?                          │            │
+│     │  │   → Validate → Promote → Retire       │            │
+│     │  │   → Assign next task or Rebalance      │            │
+│     │  ├─ Agent stuck?                         │            │
+│     │  │   → Unblock or Reassign               │            │
+│     │  ├─ Agent failing?                       │            │
+│     │  │   → Quarantine → Spawn replacement     │            │
+│     │  ├─ Assumptions broken?                  │            │
+│     │  │   → Replan → Rebalance → Broadcast     │            │
+│     │  ├─ Conflict detected?                   │            │
+│     │  │   → Reconcile or Negotiate             │            │
+│     │  └─ All clear?                           │            │
+│     │      → Continue (next Poll cycle)         │            │
+│     └──────────────────────────────────────────┘            │
+│                                                             │
+│  4. CONVERGE                                                │
+│     Merge all outputs → Reconcile conflicts                  │
+│     Integrate (run full test suite)                          │
+│                                                             │
+│  5. ACCEPT                                                  │
+│     Validate against Spec acceptance criteria                │
+│     ├─ Pass → Ship → Retrospect → Done                      │
+│     └─ Fail → Flag gaps → loop back to EXECUTE              │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘
+```
+
+> 💡 The key insight: the foreman never does the work itself. It Specs, Tracks, Polls, Unblocks, Reconciles, and Accepts. The agents do the building. The human sets the goal and reviews the Ship.
+
+---
+
+### Mapping Foreman Commands to Claude Code
+
+For implementing this pattern today in Claude Code:
+
+| Foreman Command | Claude Code Implementation |
+|---|---|
+| **Spec** | Write acceptance criteria in CLAUDE.md or a `spec.md` file the foreman references. |
+| **Sequence / Phase** | Encode the DAG as a checklist or task list in a markdown file the foreman maintains. |
+| **Spawn** | Agent Teams auto-spawns, or manual parallel `claude` sessions in separate worktrees. |
+| **Track** | Foreman maintains a `BOARD.md` or structured JSON file, updating after each Poll cycle. |
+| **Poll / Heartbeat** | `/loop` with a status-check prompt, or the foreman's own ReAct loop reading agent output files. |
+| **Assign / Reassign** | Agent Teams handles this via the shared task list. Manual: write task to agent's input file. |
+| **Reconcile** | `git merge` + foreman reviews conflicts, or foreman runs `/diff` across branches. |
+| **Accept** | Foreman runs the test suite and compares output against the Spec's acceptance criteria. |
+| **Ship** | Custom `/ship` skill: run tests → commit → push → open PR. |
+| **Retrospect** | `/compact` the session with a focus on "what worked and what didn't" → `/memory` to persist. |
+
+---
+
 *Agentic AI — Complete Command Reference · April 2026*
 *Part I: code.claude.com, Anthropic docs · Part II: Universal agent patterns*
